@@ -7,17 +7,28 @@ import { HookReturn } from 'sequelize/types/hooks'
 export default function (app: Application): typeof Model {
   const sequelizeClient: Sequelize = app.get('sequelizeClient')
   const accounts = sequelizeClient.define('accounts', {
-
+    avatar: {
+      type: DataTypes.STRING
+    },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true
     },
+    lang: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'en'
+    },
     password: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
     }
-
   }, {
     hooks: {
       beforeCount (options: any): HookReturn {
