@@ -1,0 +1,72 @@
+{
+  "name": "laya-backend-nextgen",
+  "description": "Laya Backend",
+  "version": "0.0.0",
+  "homepage": "",
+  "private": true,
+  "main": "src",
+  "keywords": [
+    "feathers"
+  ],
+  "author": {
+    "name": "Constantin Mauf-Clausen",
+    "email": "maufcons@informatik.hu-berlin.de"
+  },
+  "contributors": [],
+  "bugs": {},
+  "directories": {
+    "lib": "src",
+    "test": "test/",
+    "config": "config/"
+  },
+  "engines": {
+    "node": "^16.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "scripts": {
+    "test": "npm run lint && npm run compile && npm run jest",
+    "lint": "ts-standard ./src/**/*.ts --fix",
+    "dev": "ts-node-dev --no-notify src/",
+    "start": "npm run compile && node lib/",
+    "jest": "jest --forceExit",
+    "compile": "shx rm -rf lib/ && tsc"
+  },
+  "standard": {
+    "env": [
+      "jest"
+    ],
+    "ignore": []
+  },
+  "types": "lib/",
+  "dependencies": {
+    "@feathersjs/authentication": "^4.5.15",
+    "@feathersjs/authentication-local": "^4.5.15",
+    "@feathersjs/authentication-oauth": "^4.5.15",
+    "@feathersjs/configuration": "^4.5.15",
+    "@feathersjs/errors": "^4.5.15",
+    "@feathersjs/express": "^4.5.15",
+    "@feathersjs/feathers": "^4.5.15",
+    "@feathersjs/socketio": "^4.5.15",
+    "@feathersjs/transport-commons": "^4.5.15",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "feathers-sequelize": "^6.3.3",
+    "helmet": "^4.6.0",
+    "sequelize": "^6.19.2",
+    "sqlite3": "^5.0.8",
+    "winston": "^3.7.2"
+  },
+  "devDependencies": {
+    "@types/bluebird": "^3.5.35",
+    "@types/compression": "^1.7.2",
+    "@types/cors": "^2.8.12",
+    "@types/jest": "^27.5.1",
+    "@types/jsonwebtoken": "^8.5.8",
+    "@types/validator": "^10.11.3",
+    "axios": "^0.27.2",
+    "shx": "^0.3.4",
+    "ts-jest": "^28.0.2",
+    "ts-node-dev": "^1.1.8",
+    "ts-standard": "^11.0.0"
+  }
+}
