@@ -1,11 +1,11 @@
 // See https://sequelize.org/master/manual/model-basics.html
 // for more of what you can do here.
-import { Sequelize, DataTypes, Model } from 'sequelize';
-import { Application } from '../declarations';
-import { HookReturn } from 'sequelize/types/hooks';
+import { Sequelize, DataTypes, Model } from 'sequelize'
+import { Application } from '../declarations'
+import { HookReturn } from 'sequelize/types/hooks'
 
 export default function (app: Application): typeof Model {
-  const sequelizeClient: Sequelize = app.get('sequelizeClient');
+  const sequelizeClient: Sequelize = app.get('sequelizeClient')
   const userAppearancePrefs = sequelizeClient.define('user_appearance_prefs', {
     fontSize: {
       type: DataTypes.INTEGER,
@@ -17,8 +17,8 @@ export default function (app: Application): typeof Model {
     }
   }, {
     hooks: {
-      beforeCount(options: any): HookReturn {
-        options.raw = true;
+      beforeCount (options: any): HookReturn {
+        options.raw = true
       }
     }
   });
@@ -29,7 +29,7 @@ export default function (app: Application): typeof Model {
       foreignKey: 'id'
     })
     // See https://sequelize.org/master/manual/assocs.html
-  };
+  }
 
-  return userAppearancePrefs;
+  return userAppearancePrefs
 }

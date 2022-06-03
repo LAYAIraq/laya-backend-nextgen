@@ -16,6 +16,7 @@ describe('authentication', () => {
       try {
         await app.service('accounts').create(userInfo);
       } catch (error) {
+        console.log(error)
         // Do nothing, it just means the user already exists and can be tested
       }
     });
