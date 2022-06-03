@@ -1,27 +1,24 @@
-import * as feathersAuthentication from '@feathersjs/authentication';
-import * as local from '@feathersjs/authentication-local';
-import userAppearancePrefsModel from '../../models/user-appearance-prefs.model'
+import * as feathersAuthentication from '@feathersjs/authentication'
+import * as local from '@feathersjs/authentication-local'
+// import { HookContext } from '@feathersjs/feathers'
+import createUserPrefs from '../../hooks/create-user-prefs';
+// import userAppearancePrefsModel from '../../models/user-appearance-prefs.model'
 // Don't remove this comment. It's needed to format import lines nicely.
 
-const { authenticate } = feathersAuthentication.hooks;
-const { hashPassword, protect } = local.hooks;
+const { authenticate } = feathersAuthentication.hooks
+const { hashPassword, protect } = local.hooks
 
 export default {
   before: {
     all: [],
-    find: [ authenticate('jwt') ],
-    get: [ authenticate('jwt') ],
+    find: [authenticate('jwt')],
+    get: [authenticate('jwt')],
     create: [
-      hashPassword('password'),
-      async (context: any) => {
-        const prefs = await context.app.service('user_appearance_prefs').create({
-          id: context.id
-        })
-      }
+      hashPassword('password')
     ],
-    update: [ hashPassword('password'),  authenticate('jwt') ],
-    patch: [ hashPassword('password'),  authenticate('jwt') ],
-    remove: [ authenticate('jwt') ]
+    update: [hashPassword('password'), authenticate('jwt')],
+    patch: [hashPassword('password'), authenticate('jwt')],
+    remove: [authenticate('jwt')]
   },
 
   after: {
@@ -32,7 +29,7 @@ export default {
     ],
     find: [],
     get: [],
-    create: [],
+    create: [createUserPrefs()],
     update: [],
     patch: [],
     remove: []
@@ -47,4 +44,4 @@ export default {
     patch: [],
     remove: []
   }
-};
+}

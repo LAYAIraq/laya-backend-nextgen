@@ -25,7 +25,7 @@
   },
   "scripts": {
     "test": "npm run lint && npm run compile && npm run jest",
-    "lint": "ts-standard ./src/**/*.ts --fix",
+    "lint": "ts-standard src/ --ext .ts --fix",
     "dev": "ts-node-dev --no-notify src/",
     "start": "npm run compile && node lib/",
     "jest": "jest --forceExit",
@@ -64,6 +64,7 @@
     "@types/jsonwebtoken": "^8.5.8",
     "@types/validator": "^10.11.3",
     "axios": "^0.27.2",
+    "feathers-swagger": "^1.2.2",
     "shx": "^0.3.4",
     "ts-jest": "^28.0.2",
     "ts-node-dev": "^1.1.8",
