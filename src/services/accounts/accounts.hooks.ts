@@ -1,7 +1,7 @@
 import * as feathersAuthentication from '@feathersjs/authentication'
 import * as local from '@feathersjs/authentication-local'
 // import { HookContext } from '@feathersjs/feathers'
-import createUserPrefs from '../../hooks/create-user-prefs';
+import createUserPrefs from '../../hooks/create-user-prefs'
 // import userAppearancePrefsModel from '../../models/user-appearance-prefs.model'
 // Don't remove this comment. It's needed to format import lines nicely.
 

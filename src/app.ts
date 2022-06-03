@@ -41,19 +41,19 @@ app.configure(socketio())
 
 app.configure(sequelize)
 
-if (process.env.TS_NODE_DEV) {
+if (process.env.TS_NODE_DEV === 'true') {
   app.configure(swagger({
     specs: {
       info: {
         title: 'Swagger UI for LAYA Backend',
         description: 'This exists to test the methods manually',
-        version: '0.0.1',
+        version: '0.0.1'
       },
       schemes: ['http', 'https'] // Optionally set the protocol schema used (sometimes required when host on https)
     },
     docsPath: '/explorer',
     uiIndex: true
-  }));
+  }))
 }
 
 // Configure other middleware (see `middleware/index.ts`)

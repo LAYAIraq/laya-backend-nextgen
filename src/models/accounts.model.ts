@@ -16,7 +16,7 @@ export default function (app: Application): typeof Model {
       unique: true
     },
     emailVerified: {
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.BOOLEAN
     },
     lang: {
       type: DataTypes.STRING,
