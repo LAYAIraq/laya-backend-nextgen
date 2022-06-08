@@ -6,33 +6,19 @@ import { HookReturn } from 'sequelize/types/hooks';
 
 export default function (app: Application): typeof Model {
   const sequelizeClient: Sequelize = app.get('sequelizeClient');
-  const authorApplications = sequelizeClient.define('author_applications', {
-    accepted: {
-      type: DataTypes.BOOLEAN
-    },
+  const applicationHistory = sequelizeClient.define('application_history', {
     applicationText: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    areaOfExpertise: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    decidedOn: {
-      type: DataTypes.DATE
-    },
-    fullName: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    institution: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    status: {
       type: DataTypes.STRING
     },
-
+    areaOfExpertise: {
+      type: DataTypes.STRING
+    },
+    fullName: {
+      type: DataTypes.STRING
+    },
+    institution: {
+      type: DataTypes.STRING
+    },
   }, {
     hooks: {
       beforeCount(options: any): HookReturn {
@@ -42,12 +28,11 @@ export default function (app: Application): typeof Model {
   });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  (authorApplications as any).associate = function (models: any): void {
-    authorApplications.belongsTo(models.accounts, {
-      foreignKey: 'applicantId'
-    })
-    authorApplications.hasMany(models.application_history)
+  (applicationHistory as any).associate = function (models: any): void {
+    applicationHistory.belongsTo(models.author_applications)
+    // Define associations here
+    // See https://sequelize.org/master/manual/assocs.html
   };
 
-  return authorApplications;
+  return applicationHistory;
 }
