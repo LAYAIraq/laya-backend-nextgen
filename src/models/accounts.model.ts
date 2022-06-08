@@ -42,8 +42,9 @@ export default function (app: Application): typeof Model {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (accounts as any).associate = function (models: any): void {
-    // Define associations here
-    // See https://sequelize.org/master/manual/assocs.html
+    accounts.hasOne(models.author_applications)
+    accounts.hasOne(models.user_appearance_prefs)
+    accounts.hasOne(models.user_media_prefs)
   }
 
   return accounts
