@@ -45,6 +45,7 @@ export default function (app: Application): typeof Model {
     accounts.hasOne(models.author_applications)
     accounts.hasOne(models.user_appearance_prefs)
     accounts.hasOne(models.user_media_prefs)
+    // accounts.hasMany(models.courses)
   }
 
   return accounts
