@@ -6,24 +6,19 @@ import { HookReturn } from 'sequelize/types/hooks';
 
 export default function (app: Application): typeof Model {
   const sequelizeClient: Sequelize = app.get('sequelizeClient');
-  const courses = sequelizeClient.define('courses', {
-    courseId: {
-      type: DataTypes.UUIDV4,
+  const contentInputDialog = sequelizeClient.define('content_input_dialog', {
+    bg: {
+      type: DataTypes.STRING
+    },
+    questions: {
+      type: DataTypes.JSON
+    },
+    answers: {
+      type: DataTypes.JSON
+    },
+    contentId: {
+      type: DataTypes.STRING,
       primaryKey: true
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    category: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    abstract: {
-      type: DataTypes.STRING
-    },
-    storageId: {
-      type: DataTypes.STRING
     }
   }, {
     hooks: {
@@ -34,15 +29,12 @@ export default function (app: Application): typeof Model {
   });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  (courses as any).associate = function (models: any): void {
-    // Define associations here
-    courses.belongsTo(models.accounts, {
-      foreignKey: 'authorId'
+  (contentInputDialog as any).associate = function (models: any): void {
+    contentInputDialog.belongsTo(models.course_content, {
+      foreignKey: 'contentId'
     })
-    courses.hasMany(models.course_content)
-
     // See https://sequelize.org/master/manual/assocs.html
   };
 
-  return courses;
+  return contentInputDialog;
 }

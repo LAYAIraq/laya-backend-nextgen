@@ -39,6 +39,7 @@ export default function (app: Application): typeof Model {
     courseContent.belongsTo(models.courses, {
       foreignKey: 'courseId'
     })
+    // courseContent.hasMany()
     // See https://sequelize.org/master/manual/assocs.html
   };
 

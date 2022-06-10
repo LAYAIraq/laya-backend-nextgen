@@ -6,6 +6,7 @@ import authorApplications from './author-applications/author-applications.servic
 import applicationHistory from './application-history/application-history.service';
 import courses from './courses/courses.service';
 import courseContent from './course-content/course-content.service';
+import contentInputDialog from './content-input-dialog/content-input-dialog.service';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 export default function (app: Application): void {
@@ -16,4 +17,5 @@ export default function (app: Application): void {
   app.configure(applicationHistory);
   app.configure(courses);
   app.configure(courseContent);
+  app.configure(contentInputDialog);
 }
