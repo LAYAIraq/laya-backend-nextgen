@@ -6,19 +6,22 @@ import { HookReturn } from 'sequelize/types/hooks';
 
 export default function (app: Application): typeof Model {
   const sequelizeClient: Sequelize = app.get('sequelizeClient');
-  const contentInputDialog = sequelizeClient.define('content_input_dialog', {
-    bg: {
-      type: DataTypes.STRING
-    },
-    questions: {
-      type: DataTypes.JSON
-    },
-    answers: {
+  const contentInputDragDrop = sequelizeClient.define('content_input_drag_drop', {
+    categories: {
       type: DataTypes.JSON
     },
     contentId: {
       type: DataTypes.UUID,
       primaryKey: true
+    },
+    items: {
+      type: DataTypes.JSON
+    },
+    task: {
+      type: DataTypes.JSON
+    },
+    taskAudio: {
+      type: DataTypes.STRING
     }
   }, {
     hooks: {
@@ -29,12 +32,12 @@ export default function (app: Application): typeof Model {
   });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  (contentInputDialog as any).associate = function (models: any): void {
-    contentInputDialog.belongsTo(models.course_content, {
+  (contentInputDragDrop as any).associate = function (models: any): void {
+    contentInputDragDrop.belongsTo(models.course_content, {
       foreignKey: 'contentId'
     })
     // See https://sequelize.org/master/manual/assocs.html
   };
 
-  return contentInputDialog;
+  return contentInputDragDrop;
 }
