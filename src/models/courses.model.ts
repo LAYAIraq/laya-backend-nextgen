@@ -24,6 +24,9 @@ export default function (app: Application): typeof Model {
     },
     storageId: {
       type: DataTypes.STRING
+    },
+    root: {
+      type: DataTypes.STRING
     }
   }, {
     hooks: {
@@ -37,9 +40,11 @@ export default function (app: Application): typeof Model {
   (courses as any).associate = function (models: any): void {
     // Define associations here
     courses.belongsTo(models.accounts, {
-      foreignKey: 'authorId'
+      foreignKey: {
+        name: 'authorId',
+        allowNull: false
+      }
     })
-    courses.hasMany(models.course_content)
 
     // See https://sequelize.org/master/manual/assocs.html
   };

@@ -25,7 +25,6 @@ export default function (app: Application): typeof Model {
     title: {
       type: DataTypes.JSON
     }
-
   }, {
     hooks: {
       beforeCount(options: any): HookReturn {
@@ -37,7 +36,10 @@ export default function (app: Application): typeof Model {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (courseContent as any).associate = function (models: any): void {
     courseContent.belongsTo(models.courses, {
-      foreignKey: 'courseId'
+      foreignKey: {
+        name: 'courseId',
+        allowNull: false
+      }
     })
     // courseContent.hasMany()
     // See https://sequelize.org/master/manual/assocs.html

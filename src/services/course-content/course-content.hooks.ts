@@ -1,6 +1,6 @@
 import { HooksObject } from '@feathersjs/feathers';
 import * as authentication from '@feathersjs/authentication';
-import createCourseInput from '../../hooks/create-course-input';
+import setCourseInput from '../../hooks/set-course-input';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const { authenticate } = authentication.hooks;
@@ -12,7 +12,7 @@ export default {
     get: [],
     create: [],
     update: [],
-    patch: [],
+    patch: [setCourseInput()],
     remove: []
   },
 
@@ -20,10 +20,10 @@ export default {
     all: [],
     find: [],
     get: [],
-    create: [createCourseInput()],
-    update: [createCourseInput()],
-    patch: [createCourseInput()],
-    remove: [createCourseInput()]
+    create: [],
+    update: [],
+    patch: [],
+    remove: []
   },
 
   error: {
