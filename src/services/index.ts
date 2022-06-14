@@ -12,6 +12,9 @@ import contentInputWysiwyg from './content-input-wysiwyg/content-input-wysiwyg.s
 import contentInputScmc from './content-input-scmc/content-input-scmc.service'
 import contentInputDragDrop from './content-input-drag-drop/content-input-drag-drop.service'
 import contentInputRelate from './content-input-relate/content-input-relate.service'
+import flags from './flags/flags.service'
+import enrollments from './enrollments/enrollments.service'
+import flagAnswers from './flag-answers/flag-answers.service'
 // Don't remove this comment. It's needed to format import lines nicely.
 
 export default function (app: Application): void {
@@ -28,4 +31,7 @@ export default function (app: Application): void {
   app.configure(contentInputScmc)
   app.configure(contentInputDragDrop)
   app.configure(contentInputRelate)
+  app.configure(flags)
+  app.configure(enrollments)
+  app.configure(flagAnswers)
 }
