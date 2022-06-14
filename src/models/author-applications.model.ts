@@ -1,11 +1,11 @@
 // See https://sequelize.org/master/manual/model-basics.html
 // for more of what you can do here.
-import { Sequelize, DataTypes, Model } from 'sequelize';
-import { Application } from '../declarations';
-import { HookReturn } from 'sequelize/types/hooks';
+import { Sequelize, DataTypes, Model } from 'sequelize'
+import { Application } from '../declarations'
+import { HookReturn } from 'sequelize/types/hooks'
 
 export default function (app: Application): typeof Model {
-  const sequelizeClient: Sequelize = app.get('sequelizeClient');
+  const sequelizeClient: Sequelize = app.get('sequelizeClient')
   const authorApplications = sequelizeClient.define('author_applications', {
     accepted: {
       type: DataTypes.BOOLEAN
@@ -31,12 +31,12 @@ export default function (app: Application): typeof Model {
     },
     status: {
       type: DataTypes.STRING
-    },
+    }
 
   }, {
     hooks: {
-      beforeCount(options: any): HookReturn {
-        options.raw = true;
+      beforeCount (options: any): HookReturn {
+        options.raw = true
       }
     }
   });
@@ -47,7 +47,7 @@ export default function (app: Application): typeof Model {
       foreignKey: 'applicantId'
     })
     authorApplications.hasMany(models.application_history)
-  };
+  }
 
-  return authorApplications;
+  return authorApplications
 }

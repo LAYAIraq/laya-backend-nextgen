@@ -5,7 +5,7 @@ import { Application } from '../declarations'
 import { HookReturn } from 'sequelize/types/hooks'
 
 export default function (app: Application): typeof Model {
-  const sequelizeClient: Sequelize = app.get('sequelizeClient');
+  const sequelizeClient: Sequelize = app.get('sequelizeClient')
   const courseContent = sequelizeClient.define('course_content', {
     name: {
       type: DataTypes.STRING,
@@ -27,8 +27,8 @@ export default function (app: Application): typeof Model {
     }
   }, {
     hooks: {
-      beforeCount(options: any): HookReturn {
-        options.raw = true;
+      beforeCount (options: any): HookReturn {
+        options.raw = true
       }
     }
   });
@@ -43,7 +43,7 @@ export default function (app: Application): typeof Model {
     })
     // courseContent.hasMany()
     // See https://sequelize.org/master/manual/assocs.html
-  };
+  }
 
-  return courseContent;
+  return courseContent
 }

@@ -11,5 +11,8 @@
   "exclude": [
     "test",
     "node_modules"
-  ]
+  ],
+  "rules": {
+    "no-unused-vars": "off"
+  }
 }
