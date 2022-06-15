@@ -5,7 +5,7 @@ import cors from 'cors'
 import feathers, { HookContext as FeathersHookContext } from '@feathersjs/feathers'
 import configuration from '@feathersjs/configuration'
 import express from '@feathersjs/express'
-import socketio from '@feathersjs/socketio'
+// import socketio from '@feathersjs/socketio'
 import swagger from 'feathers-swagger'
 
 import { Application } from './declarations'
@@ -13,7 +13,7 @@ import logger from './logger'
 import middleware from './middleware'
 import services from './services'
 import appHooks from './app.hooks'
-import channels from './channels'
+// import channels from './channels'
 import authentication from './authentication'
 import sequelize from './sequelize'
 // Don't remove this comment. It's needed to format import lines nicely.
@@ -37,7 +37,7 @@ app.use(express.urlencoded({ extended: true }))
 
 // Set up Plugins and providers
 app.configure(express.rest())
-app.configure(socketio())
+// app.configure(socketio())
 
 app.configure(sequelize)
 
@@ -62,7 +62,7 @@ app.configure(authentication)
 // Set up our services (see `services/index.ts`)
 app.configure(services)
 // Set up event channels (see channels.ts)
-app.configure(channels)
+// app.configure(channels)
 
 // Configure a middleware for 404s and the error handler
 app.use(express.notFound())

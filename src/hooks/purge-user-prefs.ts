@@ -5,10 +5,18 @@ import { Hook, HookContext } from '@feathersjs/feathers'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default (options = {}): Hook => {
   return async (context: HookContext): Promise<HookContext> => {
-    // console.log(context.result)
-    context.app.service('user-appearance-prefs').create({ id: context.result.id })
-    context.app.service('user-media-prefs').create({ id: context.result.id })
-    // console.log(prefs)
+    await context.app.service('user-appearance-prefs').remove(context.id)
+      // .then((resp: any) => console.log(resp))
+      .catch((err: Error) => {
+        throw err
+      })
+
+    await context.app.service('user-media-prefs').remove(context.id)
+      // .then((resp: any) => console.log(resp))
+      .catch((err: Error) => {
+        throw err
+      })
+
     return context
   }
 }

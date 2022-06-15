@@ -1,1 +1,3 @@
-{}
+{
+  "sqlite": "sqlite://test/data/test.sqlite"
+}
