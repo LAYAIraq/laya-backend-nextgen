@@ -1,6 +1,6 @@
 import app from '../../src/app'
-import {LocalStrategy} from '@feathersjs/authentication-local'
-import {NullableId} from '@feathersjs/feathers'
+// import {LocalStrategy} from '@feathersjs/authentication-local'
+// import {NullableId} from '@feathersjs/feathers'
 
 const userParams = {
   username: 'something',
@@ -87,6 +87,17 @@ describe('\'accounts\' service', () => {
           resp = await app.service('user-media-prefs').find({id: userId})
           expect(resp.data.length).toBe(0)
         })
+    })
+
+    it('counts editors when accessing accounts/editors', async () => {
+      const editorCreation = app.service('accounts').create({
+        username: 'myEditor',
+        email: 'the@editor',
+        password: 'veryverysecret',
+        role: 'editor'
+      })
+      await expect(editorCreation).resolves.toBeTruthy()
+      await expect(app.service('accounts').get('editors')).resolves.toStrictEqual({editors: 1})
     })
   })
 })
