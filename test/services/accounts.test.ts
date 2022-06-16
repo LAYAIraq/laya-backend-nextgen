@@ -99,5 +99,7 @@ describe('\'accounts\' service', () => {
       await expect(editorCreation).resolves.toBeTruthy()
       await expect(app.service('accounts').get('editors')).resolves.toStrictEqual({editors: 1})
     })
+
+    it('correctly checks for user email')
   })
 })

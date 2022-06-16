@@ -4,13 +4,18 @@ import { Hook, HookContext } from '@feathersjs/feathers'
 
 export default (): Hook => {
   return async (context: HookContext): Promise<HookContext> => {
-    if (context.id === 'editors') {
+    console.log(context.params)
+    if (context.id === 'email') {
+      console.log('checking email...')
       await context.app.service('accounts').find({
-        where: { role: 'editor' }
+        where: { email: context.params.email }
       })
         .then((res: { data: any[] }) => {
-          const editorCount = res.data.length
-          context.result = { editors: editorCount }
+          console.log(res)
+          context.result = res.data.length !== 0
+            ? true
+            : Promise.reject(new Error('email not found'))
+          console.log(context.result)
         })
         .catch((err: Error) => console.error(err))
     }

@@ -5,6 +5,7 @@ import createUserPrefs from '../../hooks/create-user-prefs'
 import setRole from '../../hooks/set-role'
 import purgeUserPrefs from '../../hooks/purge-user-prefs'
 import countEditors from '../../hooks/count-editors'
+import checkEmail from '../../hooks/check-email'
 // import userAppearancePrefsModel from '../../models/user-appearance-prefs.model'
 // Don't remove this comment. It's needed to format import lines nicely.
 
@@ -16,7 +17,8 @@ export default {
     all: [],
     find: [authenticate('jwt')],
     get: [
-      authenticate('jwt'),
+      checkEmail(),
+      // authenticate('jwt'),
       countEditors()
     ],
     create: [hashPassword('password'), setRole()],
