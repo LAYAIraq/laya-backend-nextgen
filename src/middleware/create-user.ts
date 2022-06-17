@@ -1,23 +1,21 @@
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response } from 'express'
 import { Application } from '../declarations'
 import randomPassword from '../misc/randomPassword'
 
-export default (app: Application) => (req: Request, res: Response, next: NextFunction): void => {
+export default (app: Application) => (req: Request, res: Response): void => {
   const pwd = randomPassword(12)
-  console.log(pwd)
-  console.log('creating user with random password....')
-  console.log(req.body)
+  // console.log(req)
+  // console.log(req.headers.authorization)
   app.service('accounts').create({
     username: req.body.username,
     password: pwd,
-    email: req.body.email
+    email: req.body.email,
+    role: req.body.role
   })
-    .then(res => {
-      console.log(res)
-      const { password, ...resp } = res
-
-      res.send(JSON.stringify(JSON.parse(resp)))
+    .then((resp: any) => {
+      const { password, updatedAt, createdAt, ...user } = resp
+      res.send(user)
     })
-    .catch(err => res.send(err))
+    .catch((err: Error) => res.send(err))
   // next()
 }
