@@ -4,8 +4,7 @@ import * as local from '@feathersjs/authentication-local'
 import createUserPrefs from '../../hooks/create-user-prefs'
 import setRole from '../../hooks/set-role'
 import purgeUserPrefs from '../../hooks/purge-user-prefs'
-import countEditors from '../../hooks/count-editors'
-// import checkEmail from '../../hooks/check-email'
+import augmentApi from '../../hooks/augment-accounts-api'
 // import userAppearancePrefsModel from '../../models/user-appearance-prefs.model'
 // Don't remove this comment. It's needed to format import lines nicely.
 
@@ -17,9 +16,8 @@ export default {
     all: [],
     find: [authenticate('jwt')],
     get: [
-      // checkEmail(),
-      // authenticate('jwt'),
-      countEditors()
+      augmentApi()
+      // authenticate('jwt')
     ],
     create: [hashPassword('password'), setRole()],
     update: [hashPassword('password'), authenticate('jwt')],

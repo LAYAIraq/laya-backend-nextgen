@@ -4,7 +4,7 @@ import randomPassword from '../misc/randomPassword'
 
 export default (app: Application) => (req: Request, res: Response): void => {
   const pwd = randomPassword(12)
-  // console.log(req)
+  console.log(req.body)
   // console.log(req.headers.authorization)
   app.service('accounts').create({
     username: req.body.username,
