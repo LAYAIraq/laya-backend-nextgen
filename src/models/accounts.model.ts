@@ -3,6 +3,7 @@
 import { Sequelize, DataTypes, Model } from 'sequelize'
 import { Application } from '../declarations'
 import { HookReturn } from 'sequelize/types/hooks'
+import { randomBytes } from 'crypto'
 
 export default function (app: Application): typeof Model {
   const sequelizeClient: Sequelize = app.get('sequelizeClient')
@@ -16,7 +17,8 @@ export default function (app: Application): typeof Model {
       unique: true
     },
     emailVerified: {
-      type: DataTypes.BOOLEAN
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     },
     lang: {
       type: DataTypes.STRING,
@@ -35,6 +37,10 @@ export default function (app: Application): typeof Model {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true
+    },
+    verificationToken: {
+      type: DataTypes.UUID,
+      defaultValue: randomBytes(16).toString('hex')
     }
   }, {
     hooks: {

@@ -5,7 +5,38 @@ import { NotAcceptable } from '@feathersjs/errors'
 
 export default (): Hook => {
   return async (context: HookContext): Promise<HookContext> => {
+    // const accounts = context.app.service('accounts')
     console.log(context.params.query)
+    // if (context.id === 'confirm') {
+    //   console.log('confirming email...')
+    //   console.log(context.params.query)
+    //   if (typeof (context.params.query) !== 'undefined') {
+    //     console.log(context.params.query.uid)
+    //     console.log(context.params.query.token)
+    //     await context.app.service('accounts').find({
+    //       query: { id: context.params.query.uid }
+    //     })
+    //       .then((res: {
+    //         data: [{
+    //           id: number
+    //           verificationToken: string
+    //         }?] }) => {
+    //         if (res.data.length !== 0 && typeof (res.data[0]) !== 'undefined') {
+    //           accounts.patch(res.data[0].id, {
+    //             verificationToken: null,
+    //             emailVerified: true
+    //           })
+    //             .then((resp: any) => console.log(resp))
+    //             .catch((err: Error) => console.error(err))
+    //           context.result = null
+    //         } else {
+    //           throw new NotAcceptable('some weird error!')
+    //         }
+    //         console.log(context.result)
+    //       })
+    //       .catch(() => 'email does not exist')
+    //   }
+    // } else
     if (context.id === 'email') {
       console.log('checking email...')
       if (typeof (context.params.query) !== 'undefined') {
@@ -34,7 +65,8 @@ export default (): Hook => {
         })
           .then((res: { data: any[] }) => {
             console.log(res)
-            if (res.data.length !== 0) {
+            if (res.data.length === 1) {
+              console.log('result data length is 1!')
               context.result = true
             } else {
               throw new NotAcceptable('some weird error!')
@@ -43,7 +75,8 @@ export default (): Hook => {
           })
           .catch(() => 'name does not exist')
       }
-    } else if (context.id === 'editors') {
+    } else if (context.id === 'editors') { // TODO: move to own service or find way to authenticate
+      console.log(context.params.authenticated)
       await context.app.service('accounts').find({
         where: { role: 'editor' }
       })

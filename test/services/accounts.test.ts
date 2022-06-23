@@ -100,6 +100,6 @@ describe('\'accounts\' service', () => {
       await expect(app.service('accounts').get('editors')).resolves.toStrictEqual({editors: 1})
     })
 
-    it('correctly checks for user email')
+    it.todo('correctly checks for user email')
   })
 })

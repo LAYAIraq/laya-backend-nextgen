@@ -5,6 +5,7 @@ import createUserPrefs from '../../hooks/create-user-prefs'
 import setRole from '../../hooks/set-role'
 import purgeUserPrefs from '../../hooks/purge-user-prefs'
 import augmentApi from '../../hooks/augment-accounts-api'
+import { isProvider, iff } from 'feathers-hooks-common'
 // import userAppearancePrefsModel from '../../models/user-appearance-prefs.model'
 // Don't remove this comment. It's needed to format import lines nicely.
 
@@ -14,10 +15,11 @@ const { hashPassword, protect } = local.hooks
 export default {
   before: {
     all: [],
-    find: [authenticate('jwt')],
+    find: [iff(isProvider('rest'), authenticate('jwt'))],
     get: [
-      augmentApi()
-      // authenticate('jwt')
+      // iff(isProvider('rest'), authenticate('jwt')),
+      augmentApi(),
+      iff(isProvider('rest'), authenticate('jwt'))
     ],
     create: [hashPassword('password'), setRole()],
     update: [hashPassword('password'), authenticate('jwt')],
