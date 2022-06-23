@@ -3,7 +3,7 @@
 import { Sequelize, DataTypes, Model } from 'sequelize'
 import { Application } from '../declarations'
 import { HookReturn } from 'sequelize/types/hooks'
-import { randomBytes } from 'crypto'
+import createVerificationToken from '../misc/create-verification-token'
 
 export default function (app: Application): typeof Model {
   const sequelizeClient: Sequelize = app.get('sequelizeClient')
@@ -40,7 +40,7 @@ export default function (app: Application): typeof Model {
     },
     verificationToken: {
       type: DataTypes.UUID,
-      defaultValue: randomBytes(16).toString('hex')
+      defaultValue: createVerificationToken(16)
     }
   }, {
     hooks: {
