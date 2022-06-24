@@ -39,6 +39,7 @@ export default (): Hook => {
     // } else
     if (context.id === 'email') {
       console.log('checking email...')
+      console.log(context.params)
       if (typeof (context.params.query) !== 'undefined') {
         console.log(context.params.query.email)
         await context.app.service('accounts').find({
