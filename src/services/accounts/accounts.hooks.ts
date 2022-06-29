@@ -18,8 +18,7 @@ export default {
     find: [iff(isProvider('rest'), authenticate('jwt'))],
     get: [
       // iff(isProvider('rest'), authenticate('jwt')),
-      augmentApi(),
-      iff(isProvider('rest'), authenticate('jwt'))
+      augmentApi()
     ],
     create: [hashPassword('password'), setRole()],
     update: [hashPassword('password'), authenticate('jwt')],
