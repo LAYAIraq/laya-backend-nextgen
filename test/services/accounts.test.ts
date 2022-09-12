@@ -4,9 +4,9 @@ import app from '../../src/app'
 
 const userParams = () => {
   return {
-    username: 'something' + Math.floor(Math.random() * 10),
+    username: 'something' + Math.floor(Math.random() * 100),
     password: 'supersecret',
-    email: 'veryunique' + Math.floor(Math.random() * 10)
+    email: 'veryunique' + Math.floor(Math.random() * 100)
   }
 }
 
@@ -45,62 +45,71 @@ describe('\'accounts\' service', () => {
     })
   })
 
-  describe.skip('hooks', () => {
+  describe('hooks', () => {
     let userId: number
-    beforeAll(async () => {
+    beforeEach(async () => {
       await app.service('accounts').create({
         ...userParams()
       })
         .then(resp => {
-          console.log(resp)
-
-          userId = resp.data[0].id
-          console.log(`userId: ${userId}`)
+          userId = resp.id
         })
-        .catch(async () => { // fallback if user has been created
-          await app.service('accounts').find()
-            .then((resp: any) => userId = resp.data[0].id)
+        .catch(() => {
+          throw new Error('user already exists')
         })
     })
 
+    afterEach(async () => {
+      await app.service('accounts').remove(userId)
+        .then(() => console.log('removed user ' + userId))
+        .catch(() => console.log('user ' + userId + ' already removed'))
+    })
+
     it('also created an entry in appearance prefs', async () => {
-      const resp: any = await app.service('user-appearance-prefs').find({
+      const resp: any = await app.service('user-appearance-prefs').find({query:{
         id: userId
-      })
-      console.log(resp)
-      expect(resp.data.length).toBeTruthy()
+      }})
+      expect(resp.data.length).toBe(1)
       expect(resp.data[0].id).toEqual(userId)
     })
 
     it('also created an entry in media prefs', async () => {
       const resp: any = await app.service('user-media-prefs').find({
-        id: userId
+        query: {id: userId}
       })
-      expect(resp.data.length).toBe(1)
-      expect(resp.data[0].id).toBeTruthy()
+      expect(resp.data.length).toBeTruthy()
+      expect(resp.data[0].id).toEqual(userId)
     })
 
     it('removes prefs when removing user', async () => {
       await app.service('accounts').remove(userId)
         .then(async () => {
           let resp: any = await app.service('user-appearance-prefs').find({id: userId})
-          expect(resp.data.length).toBe(0)
+          expect(resp.data.length).toBeLessThan(2)
           resp = await app.service('user-media-prefs').find({id: userId})
-          expect(resp.data.length).toBe(0)
+          expect(resp.data.length).toBeLessThan(2)
         })
     })
 
+    it.todo('correctly checks for user email')
+  })
+
+  describe('custom endpoints', () => {
     it('counts editors when accessing accounts/editors', async () => {
-      const editorCreation = app.service('accounts').create({
+      let id: number
+      await app.service('accounts').create({
         username: 'myEditor',
         email: 'the@editor',
         password: 'veryverysecret',
         role: 'editor'
+      }).then(async resp => {
+        id = resp.id
+        await expect(app.service('accounts').get('editors')).resolves.toStrictEqual({editors: 1})
+        await app.service('accounts').remove(id).catch((err: Error) => {
+          throw err
+        })
       })
-      await expect(editorCreation).resolves.toBeTruthy()
-      await expect(app.service('accounts').get('editors')).resolves.toStrictEqual({editors: 1})
-    })
 
-    it.todo('correctly checks for user email')
+    })
   })
 })

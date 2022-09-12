@@ -2,7 +2,7 @@ import * as feathersAuthentication from '@feathersjs/authentication'
 import * as local from '@feathersjs/authentication-local'
 // import { HookContext } from '@feathersjs/feathers'
 import createUserPrefs from '../../hooks/create-user-prefs'
-import debug from '../../hooks/debug'
+// import debug from '../../hooks/debug'
 import setRole from '../../hooks/set-role'
 import purgeUserPrefs from '../../hooks/purge-user-prefs'
 import augmentAccountsApi from '../../hooks/augment-accounts-api'
@@ -21,7 +21,7 @@ export default {
       // iff(isProvider('rest'), authenticate('jwt')),
       augmentAccountsApi()
     ],
-    create: [debug(), setRole(), hashPassword('password')],
+    create: [setRole(), hashPassword('password')],
     update: [hashPassword('password'), authenticate('jwt')],
     patch: [hashPassword('password'), authenticate('jwt')],
     remove: [
