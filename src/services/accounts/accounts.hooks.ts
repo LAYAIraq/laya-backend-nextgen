@@ -2,9 +2,10 @@ import * as feathersAuthentication from '@feathersjs/authentication'
 import * as local from '@feathersjs/authentication-local'
 // import { HookContext } from '@feathersjs/feathers'
 import createUserPrefs from '../../hooks/create-user-prefs'
+import debug from '../../hooks/debug'
 import setRole from '../../hooks/set-role'
 import purgeUserPrefs from '../../hooks/purge-user-prefs'
-import augmentApi from '../../hooks/augment-accounts-api'
+import augmentAccountsApi from '../../hooks/augment-accounts-api'
 import { isProvider, iff } from 'feathers-hooks-common'
 // import userAppearancePrefsModel from '../../models/user-appearance-prefs.model'
 // Don't remove this comment. It's needed to format import lines nicely.
@@ -18,9 +19,9 @@ export default {
     find: [iff(isProvider('rest'), authenticate('jwt'))],
     get: [
       // iff(isProvider('rest'), authenticate('jwt')),
-      augmentApi()
+      augmentAccountsApi()
     ],
-    create: [hashPassword('password'), setRole()],
+    create: [debug(), setRole(), hashPassword('password')],
     update: [hashPassword('password'), authenticate('jwt')],
     patch: [hashPassword('password'), authenticate('jwt')],
     remove: [

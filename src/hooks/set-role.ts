@@ -1,11 +1,13 @@
 // Use this hook to manipulate incoming or outgoing data.
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 import { Hook, HookContext } from '@feathersjs/feathers'
+import { BadRequest } from '@feathersjs/errors'
 import roles from '../misc/roles'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default (): Hook => {
-  return async (context: HookContext): Promise<HookContext> => {
+  return (context: HookContext): HookContext => {
+    // console.log(context)
     if (typeof (context.data.role) === 'undefined') {
       context.data.role = roles.STUDENT
     } else { // throw error if wrong role is set
@@ -16,7 +18,9 @@ export default (): Hook => {
         }
       })
       if (!present) {
-        throw new Error('role does not exist!')
+        throw new BadRequest('role does not exist!', {
+          role: context.data.role
+        })
       }
     }
     return context

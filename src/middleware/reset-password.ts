@@ -19,13 +19,17 @@ export default (app: Application) => (req: Request, res: Response): void => {
     // console.log(req)
     accounts.get('email', { query: { email: email } })
       .then(id => {
-        if (id !== req.params.id) {
+        if (id !== req.body.id) {
           secCheck = false
         }
       })
       .catch(() => {
         secCheck = false
       })
+
+    // get verification from database
+    accounts.get('verification', { query: { id: req.body.id } })
+      .catch(err => console.error(err))
   }
   if (secCheck) {
     accounts.patch(req.params.id, {
