@@ -82,12 +82,24 @@ describe('\'accounts\' service', () => {
     })
 
     it('removes prefs when removing user', async () => {
+      const findIf = (service: string, id: number) => {
+        return app.service(service).find({
+          query: {
+            id: id,
+            $limit: 0
+          }})
+      }
+
+      let resp: any = await findIf('user-appearance-prefs', userId)
+      expect(resp.total).toBe(1)
+      resp = await findIf('user-media-prefs', userId)
+      expect(resp.total).toBe(1)
       await app.service('accounts').remove(userId)
         .then(async () => {
-          let resp: any = await app.service('user-appearance-prefs').find({id: userId})
-          expect(resp.data.length).toBeLessThan(2)
-          resp = await app.service('user-media-prefs').find({id: userId})
-          expect(resp.data.length).toBeLessThan(2)
+          resp = await findIf('user-appearance-prefs', userId)
+          expect(resp.total).toBe(0)
+          resp = await findIf('user-media-prefs', userId)
+          expect(resp.total).toBe(0)
         })
     })
 

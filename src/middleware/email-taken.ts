@@ -1,23 +1,25 @@
 import { Request, Response } from 'express'
 import { Application } from '../declarations'
+import { NotFound, BadRequest, GeneralError } from '@feathersjs/errors'
 
 export default (app: Application) => (req: Request, res: Response): void => {
-  console.log('checking email...')
   if (typeof (req.params) !== 'undefined') {
-    console.log(req.params)
+    // console.log(req.params)
     app.service('accounts').find({
-      query: { email: req.params.email }
+      query: {
+        email: req.params.email,
+        $limit: 0
+      }
     })
       .then((resp: any) => {
-        console.log(resp)
-        if (resp.data.length === 1) {
+        if (resp.total === 1) {
           res.send(true)
         } else {
-          res.json({ code: 404, message: 'email Not Found' })
+          res.status(404).send(new NotFound('email not found'))
         }
       })
-      .catch(() => res.json({ code: 500, message: 'Something went wrong' }))
+      .catch(() => res.status(500).send(new GeneralError('error checking email')))
   } else {
-    res.json({ code: 400, message: 'wrong request' })
+    res.status(400).send(new BadRequest('no email provided'))
   }
 }

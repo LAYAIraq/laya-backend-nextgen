@@ -38,7 +38,7 @@ export default (): Hook => {
     //   }
     // } else
     if (context.id === 'editors') { // TODO: move to own service or find way to authenticate
-      console.log(context.params.authenticated)
+      // console.log(context.params.authenticated)
       await context.app.service('accounts').find({
         query: {
           $limit: 0,
@@ -46,8 +46,7 @@ export default (): Hook => {
         }
       })
         .then((res: { total: number }) => {
-          const editorCount = res.total
-          context.result = { editors: editorCount }
+          context.result = { editors: res.total }
         })
         .catch((err: Error) => console.error(err))
     }
