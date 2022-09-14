@@ -3,7 +3,7 @@ import { Application } from '../declarations'
 import { NotAcceptable } from '@feathersjs/errors'
 
 export default (app: Application) => (req: Request, res: Response): void => {
-  if (typeof (req.body) !== 'undefined') {
+  if (typeof (req.body) !== 'undefined' && req.method === 'POST') {
     // console.log(req.body.uid)
     // console.log(req.body.token)
     app.service('accounts').find({
@@ -29,5 +29,7 @@ export default (app: Application) => (req: Request, res: Response): void => {
       .catch((err: Error) => {
         res.status(400).send(err)
       })
+  } else {
+    res.status(400).send(new NotAcceptable('wrong request'))
   }
 }

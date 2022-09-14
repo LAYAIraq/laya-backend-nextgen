@@ -74,4 +74,10 @@ describe('createUser middleware', () => {
     const res: any = await app.service('accounts').find({query: {username: 'test'}})
     expect(res.total).toBe(0)
   })
+
+  it('fails with wrong request', async () => {
+    await request(app)
+      .get('/accounts/create')
+      .expect(400)
+  })
 })

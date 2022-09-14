@@ -44,4 +44,11 @@ describe('Confirm Email middleware', () => {
       .send({ uid, token: 'wrong token' })
     expect(response.status).toBe(400)
   })
+
+  it('should return a 400 with wrong request', async () => {
+    const response = await request(app)
+      .get('/confirmEmail')
+      .send({ uid, token })
+    expect(response.status).toBe(400)
+  })
 })

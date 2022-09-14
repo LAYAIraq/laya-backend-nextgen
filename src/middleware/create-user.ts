@@ -7,9 +7,9 @@ export default (app: Application) => (req: Request, res: Response): void => {
   const pwd = randomPassword(12)
   if (typeof (req.body.role) !== 'undefined' &&
     !(Object.values(roles).some(role => role === req.body.role))
-  ) { // check if role is valid
+  ) { // check if role is invalid
     res.status(403).send({ message: 'wrong role', status: 403 })
-  } else {
+  } else if (req.method === 'POST') {
     app.service('accounts').create({
       username: req.body.username,
       password: pwd,
@@ -22,5 +22,7 @@ export default (app: Application) => (req: Request, res: Response): void => {
       })
       .catch((err: Error) => res.send(err))
     // next()
+  } else {
+    res.status(400).send({ message: 'wrong request', status: 400 })
   }
 }

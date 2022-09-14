@@ -6,7 +6,7 @@ import { Hook, HookContext } from '@feathersjs/feathers'
 export default (): Hook => {
   return async (context: HookContext): Promise<HookContext> => {
     // const accounts = context.app.service('accounts')
-    console.log(context.params.query)
+    // console.log(context.params.query)
     // if (context.id === 'confirm') {
     //   console.log('confirming email...')
     //   console.log(context.params.query)
