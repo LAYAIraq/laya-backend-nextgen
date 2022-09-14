@@ -3,26 +3,31 @@ import { Application } from '../declarations'
 import { NotAcceptable } from '@feathersjs/errors'
 
 export default (app: Application) => (req: Request, res: Response): void => {
-  // console.log(req.body)
   if (typeof (req.body) !== 'undefined') {
     // console.log(req.body.uid)
     // console.log(req.body.token)
     app.service('accounts').find({
-      query: { id: req.body.uid }
+      query: {
+        id: req.body.uid,
+        verificationToken: req.body.token
+      }
     })
       .then((resp: any) => {
-        if (resp.data.length !== 0 &&
-          typeof (resp.data[0]) !== 'undefined') {
+        if (resp.total === 1) {
           app.service('accounts').patch(resp.data[0].id, {
             verificationToken: null,
             emailVerified: true
           })
-            .then(() => res.send())
-            .catch((err: Error) => res.send(err))
+            .then(() => res.send('Email verified'))
+            .catch((err: Error) => {
+              throw err
+            })
         } else {
-          throw new NotAcceptable('some weird error!')
+          res.status(400).send(new NotAcceptable('wrong verification'))
         }
       })
-      .catch((err: Error) => res.send(err))
+      .catch((err: Error) => {
+        res.status(400).send(err)
+      })
   }
 }
