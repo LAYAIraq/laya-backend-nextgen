@@ -5,43 +5,22 @@ import createVerificationToken from '../misc/create-verification-token'
 
 export default (app: Application) => (req: Request, res: Response): void => {
   const accounts = app.service('accounts')
-  console.log('Authorization: ')
-  console.log(req.headers.authorization)
-  let secCheck = true
-  if (typeof (req.headers.authorization) === 'undefined') {
-    const { email } = req.body
-    // console.log('Query:')
-    // console.log(req.body)
-    console.log(email)
-    // console.log('Params: ')
-    // console.log(req.params)
-    // console.log('Request: ')
-    // console.log(req)
-    accounts.get('email', { query: { email: email } })
-      .then(id => {
-        if (id !== req.body.id) {
-          secCheck = false
-        }
-      })
-      .catch(() => {
-        secCheck = false
-      })
-
-    // get verification from database
-    accounts.get('verification', { query: { id: req.body.id } })
-      .catch(err => console.error(err))
-  }
-  if (secCheck) {
-    accounts.patch(req.params.id, {
-      password: randomPassword(12),
-      verificationToken: createVerificationToken(16)
+  accounts.get(req.params.id)
+    .then((account: any) => {
+      if (account.locked !== null) {
+        accounts.patch(req.params.id, {
+          password: randomPassword(12),
+          verificationToken: createVerificationToken(16),
+          locked: Date.now() + 1000 * 60 * 60 * 24
+        })
+          .then(() => { // resetting worked
+            // TODO: send email
+            res.send(true)
+          })
+          .catch((err: Error) => res.send(err))
+      } else {
+        res.status(403).send('Account is locked')
+      }
     })
-      .then(() => { // resetting worked
-        // TODO: send email
-        res.send(true)
-      })
-      .catch((err: Error) => res.send(err))
-  } else {
-    throw new Error('not authorized!')
-  }
+    .catch((err: Error) => res.send(err))
 }

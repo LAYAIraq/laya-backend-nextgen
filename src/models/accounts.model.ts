@@ -25,6 +25,10 @@ export default function (app: Application): typeof Model {
       allowNull: false,
       defaultValue: 'en'
     },
+    locked: {
+      type: DataTypes.DATE,
+      defaultValue: null
+    },
     password: {
       type: DataTypes.STRING,
       allowNull: false
