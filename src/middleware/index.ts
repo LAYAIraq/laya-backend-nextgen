@@ -9,10 +9,10 @@ import emailTaken from './email-taken'
 // Don't remove this comment. It's needed to format import lines nicely.
 
 export default function (app: Application): void {
-  app.use('/confirmEmail', confirmEmail(app))
+  app.use('/accounts/confirm', confirmEmail(app))
   app.use('/accounts/create', createUser(app))
   app.use('/accounts/pwd-reset/:id', resetPassword(app))
   app.use('/accounts/set-pwd', setNewPassword(app))
-  app.use('/nameTaken/:name', nameTaken(app))
-  app.use('/emailTaken/:email', emailTaken(app))
+  app.use('/accounts/name/:name', nameTaken(app))
+  app.use('/accounts/email/:email', emailTaken(app))
 }

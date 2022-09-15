@@ -3,7 +3,7 @@ import { Application } from '../declarations'
 import { NotFound, BadRequest, GeneralError } from '@feathersjs/errors'
 
 export default (app: Application) => (req: Request, res: Response): void => {
-  if (typeof (req.params) !== 'undefined') {
+  if (typeof (req.params) !== 'undefined' && req.method === 'GET') {
     // console.log(req.params)
     app.service('accounts').find({
       query: {

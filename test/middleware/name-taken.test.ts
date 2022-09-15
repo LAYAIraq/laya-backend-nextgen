@@ -2,35 +2,35 @@ import app from '../../src/app'
 // @ts-ignore
 import request from 'supertest'
 
-describe('emailTaken middleware', () => {
+describe('nameTaken middleware', () => {
 
   afterAll(async () => {
-    await app.service('accounts').find({ query: {email: 'test@test'} })
+    await app.service('accounts').find({ query: { username: 'name-test' } })
       .then(async (resp: any) => {
         await app.service('accounts').remove(resp.data[0].id)
       })
       .catch(() => 'user not found')
   })
 
-  it('fails when no email given', async () => {
-    await request(app).get('/accounts/email').expect(404)
+  it('fails when no name given', async () => {
+    await request(app).get('/accounts/name').expect(404)
   })
 
-  it('fails when email not present', async () => {
-    await request(app).get('/accounts/email/doesntmatter').expect(404)
+  it('fails when name not present', async () => {
+    await request(app).get('/accounts/email/somenamethatisnotthere').expect(404)
   })
 
   it('fails with wrong http method', async () => {
-    await request(app).post('/accounts/email/test@test').expect(400)
+    await request(app).post('/accounts/name/name-test').expect(400)
   })
 
   it('returns true when email present', async () => {
     await app.service('accounts').create({
-      username: 'email-test',
+      username: 'name-test',
       email: 'test@test',
       password: 'test'
     })
-    await request(app).get('/accounts/email/test@test')
+    await request(app).get('/accounts/name/name-test')
       .expect(200)
       .then((res: any) => {
         expect(res.body).toBe(true)

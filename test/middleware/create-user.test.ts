@@ -4,7 +4,7 @@ import request from 'supertest'
 describe('createUser middleware', () => {
 
   afterEach(async () => {
-    await app.service('accounts').find({ query: { username: 'test' } })
+    await app.service('accounts').find({ query: { username: 'create-test' } })
       .then(async (users: any) => {
         if (users.total !== 0) {
           await app.service('accounts').remove(users.data[0].id)
@@ -16,23 +16,23 @@ describe('createUser middleware', () => {
     await request(app)
       .post('/accounts/create')
       .send({
-        username: 'test',
-        email: 'test'
+        username: 'create-test',
+        email: 'create-test'
       })
-    const res: any = await app.service('accounts').find({query: {username: 'test'}})
+    const res: any = await app.service('accounts').find({query: {username: 'create-test'}})
     expect(res.total).toBe(1)
-    expect(res.data[0].username).toBe('test')
+    expect(res.data[0].username).toBe('create-test')
   })
 
   it('creates an editor ', async () => {
     await request(app)
       .post('/accounts/create')
       .send({
-        username: 'test',
-        email: 'test',
+        username: 'create-test',
+        email: 'create-test',
         role: 'editor'
       })
-    const res: any = await app.service('accounts').find({query: {username: 'test'}})
+    const res: any = await app.service('accounts').find({query: {username: 'create-test'}})
     expect(res.total).toBe(1)
     expect(res.data[0].role).toBe('editor')
   })
@@ -41,11 +41,11 @@ describe('createUser middleware', () => {
     await request(app)
       .post('/accounts/create')
       .send({
-        username: 'test',
-        email: 'test',
+        username: 'create-test',
+        email: 'create-test',
         role: 'author'
       })
-    const res: any = await app.service('accounts').find({query: {username: 'test'}})
+    const res: any = await app.service('accounts').find({query: {username: 'create-test'}})
     expect(res.total).toBe(1)
     expect(res.data[0].role).toBe('author')
   })
@@ -67,11 +67,11 @@ describe('createUser middleware', () => {
     await request(app)
       .post('/accounts/create')
       .send({
-        username: 'test',
-        email: 'test',
+        username: 'create-test',
+        email: 'create-test',
         role: 'wrong'
       }).expect(403)
-    const res: any = await app.service('accounts').find({query: {username: 'test'}})
+    const res: any = await app.service('accounts').find({query: {username: 'create-test'}})
     expect(res.total).toBe(0)
   })
 

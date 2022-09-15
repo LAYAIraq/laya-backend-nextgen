@@ -1,16 +1,9 @@
 import app from '../../src/app'
 // import {LocalStrategy} from '@feathersjs/authentication-local'
 // import {NullableId} from '@feathersjs/feathers'
-
+// @ts-ignore
+import createUser from '../helpers/create-test-user'
 const accounts = app.service('accounts')
-
-const userParams = () => {
-  return {
-    username: 'something' + Math.floor(Math.random() * 100),
-    password: 'supersecret',
-    email: 'veryunique' + Math.floor(Math.random() * 100)
-  }
-}
 
 describe('\'accounts\' service', () => {
   afterAll(async () => {
@@ -18,8 +11,7 @@ describe('\'accounts\' service', () => {
       .then(async (resp: any ) => {
         for (const user of resp.data) {
           await accounts.remove(user.id)
-            .then(() => console.log('removed user ' + user.id))
-            .catch(() => console.log('user ' + user.id + ' already removed'))
+            .catch(() => 'user not found')
         }
       })
       .catch(() => 'user already removed')
@@ -32,16 +24,16 @@ describe('\'accounts\' service', () => {
   describe('validation', () => {
     it('rejects when wrong role is set', async () => {
       const testUser = accounts.create({
-        ...userParams(),
+        username: 'something',
+        password: 'supersecret',
+        email: 'veryunique',
         role: 'someRole'
       })
       await expect(testUser).rejects.toThrow('role does not exist!')
     })
 
     it('sets role to student none is set', async () => {
-      const testUser = accounts.create({
-        ...userParams()
-      })
+      const testUser = createUser()
       await expect(testUser).resolves.toHaveProperty('role', 'student')
     })
   })
@@ -49,9 +41,7 @@ describe('\'accounts\' service', () => {
   describe('hooks', () => {
     let userId: number
     beforeEach(async () => {
-      await accounts.create({
-        ...userParams()
-      })
+      await createUser()
         .then(resp => {
           userId = resp.id
         })
@@ -62,8 +52,7 @@ describe('\'accounts\' service', () => {
 
     afterEach(async () => {
       await accounts.remove(userId)
-        .then(() => console.log('removed user ' + userId))
-        .catch(() => console.log('user ' + userId + ' already removed'))
+        .catch(() => 'user not found')
     })
 
     it('also created an entry in appearance prefs', async () => {

@@ -1,16 +1,14 @@
 import app from '../../src/app'
 import request from 'supertest'
+// @ts-ignore
+import createUser from '../helpers/create-test-user'
 
 describe('resetPassword middleware', () => {
   let password: string
   let id: number
 
   beforeAll( async () => {
-    await app.service('accounts').create({
-      username: 'test',
-      email: 'test',
-      password: 'test'
-    })
+    await createUser()
       .then((account: any) => {
         id = account.id
         password = account.password
@@ -38,7 +36,7 @@ describe('resetPassword middleware', () => {
   })
 
   it('fails when account is locked', async () => {
-    await app.service('accounts').patch(id, {locked: true})
+    await app.service('accounts').patch(id, {locked: Date.now()})
     await request(app)
       .post('/accounts/pwd-reset/' + id)
       .expect(403)
