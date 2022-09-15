@@ -109,7 +109,6 @@ describe('\'accounts\' service', () => {
         })
     })
 
-    it.todo('correctly checks for user email')
   })
 
   describe('custom endpoints', () => {

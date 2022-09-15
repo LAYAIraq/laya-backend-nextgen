@@ -54,11 +54,11 @@ describe('createUser middleware', () => {
     await request(app)
       .post('/accounts/create')
       .send({
-        username: 'test',
+        username: 'create-test',
         email: 'test',
         role: 'admin'
       })
-    const res: any = await app.service('accounts').find({query: {username: 'test'}})
+    const res: any = await app.service('accounts').find({query: {username: 'create-test'}})
     expect(res.total).toBe(1)
     expect(res.data[0].role).toBe('admin')
   })
