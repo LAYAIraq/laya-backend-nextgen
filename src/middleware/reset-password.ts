@@ -7,7 +7,7 @@ export default (app: Application) => (req: Request, res: Response): void => {
   const accounts = app.service('accounts')
   accounts.get(req.params.id)
     .then((account: any) => {
-      if (account.locked !== null) {
+      if (account.locked === null) {
         accounts.patch(req.params.id, {
           password: randomPassword(12),
           verificationToken: createVerificationToken(16),

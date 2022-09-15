@@ -5,7 +5,7 @@ describe('resetPassword middleware', () => {
   let password: string
   let id: number
 
-  beforeEach( async () => {
+  beforeAll( async () => {
     await app.service('accounts').create({
       username: 'test',
       email: 'test',
@@ -17,24 +17,24 @@ describe('resetPassword middleware', () => {
       })
   })
 
-  afterEach( async () => {
+  afterAll( async () => {
     await app.service('accounts').remove(id)
   })
 
-  it('changes the password', async () => {
-    app.service('accounts').create({
-      username: 'test',
-      email: 'test',
-      password: 'test'
-    })
+  it('changes the password, locks account', async () => {
+    await app.service('accounts').get(id)
       .then(async (account: any) => {
         const pwd = account.password
         await request(app)
           .post('/accounts/pwd-reset/' + account.id)
           .expect(200)
-        await expect(app.service('accounts').get(account.id)).resolves.toHaveProperty('password', expect.not.stringMatching(pwd))
+        const usr = await app.service('accounts').get(account.id)
+        expect(usr).toHaveProperty('password', expect.not.stringMatching(pwd))
+        expect(usr).toHaveProperty('locked', expect.any(String))
       })
-      .catch((err: Error) => console.log(err))
+      .catch(() => {
+        expect(true).toBe(false)
+      })
   })
 
   it('fails when account is locked', async () => {

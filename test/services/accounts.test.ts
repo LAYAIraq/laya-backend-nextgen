@@ -2,6 +2,8 @@ import app from '../../src/app'
 // import {LocalStrategy} from '@feathersjs/authentication-local'
 // import {NullableId} from '@feathersjs/feathers'
 
+const accounts = app.service('accounts')
+
 const userParams = () => {
   return {
     username: 'something' + Math.floor(Math.random() * 100),
@@ -12,10 +14,10 @@ const userParams = () => {
 
 describe('\'accounts\' service', () => {
   afterAll(async () => {
-    await app.service('accounts').find()
+    await accounts.find()
       .then(async (resp: any ) => {
         for (const user of resp.data) {
-          await app.service('accounts').remove(user.id)
+          await accounts.remove(user.id)
             .then(() => console.log('removed user ' + user.id))
             .catch(() => console.log('user ' + user.id + ' already removed'))
         }
@@ -24,13 +26,12 @@ describe('\'accounts\' service', () => {
   })
 
   it('registered the service', () => {
-    const service = app.service('accounts')
-    expect(service).toBeTruthy()
+    expect(accounts).toBeTruthy()
   })
 
   describe('validation', () => {
     it('rejects when wrong role is set', async () => {
-      const testUser = app.service('accounts').create({
+      const testUser = accounts.create({
         ...userParams(),
         role: 'someRole'
       })
@@ -38,7 +39,7 @@ describe('\'accounts\' service', () => {
     })
 
     it('sets role to student none is set', async () => {
-      const testUser = app.service('accounts').create({
+      const testUser = accounts.create({
         ...userParams()
       })
       await expect(testUser).resolves.toHaveProperty('role', 'student')
@@ -48,7 +49,7 @@ describe('\'accounts\' service', () => {
   describe('hooks', () => {
     let userId: number
     beforeEach(async () => {
-      await app.service('accounts').create({
+      await accounts.create({
         ...userParams()
       })
         .then(resp => {
@@ -60,7 +61,7 @@ describe('\'accounts\' service', () => {
     })
 
     afterEach(async () => {
-      await app.service('accounts').remove(userId)
+      await accounts.remove(userId)
         .then(() => console.log('removed user ' + userId))
         .catch(() => console.log('user ' + userId + ' already removed'))
     })
@@ -94,12 +95,28 @@ describe('\'accounts\' service', () => {
       expect(resp.total).toBe(1)
       resp = await findIf('user-media-prefs', userId)
       expect(resp.total).toBe(1)
-      await app.service('accounts').remove(userId)
+      await accounts.remove(userId)
         .then(async () => {
           resp = await findIf('user-appearance-prefs', userId)
           expect(resp.total).toBe(0)
           resp = await findIf('user-media-prefs', userId)
           expect(resp.total).toBe(0)
+        })
+    })
+
+    it('removes locked entry when it is older than 24 hrs', async () => {
+      const newDate = Date.now() - 1000 * 60 * 60 * 24 * 2
+      await accounts.patch(userId, {locked: newDate})
+        .then(async () => {
+          await expect(accounts.get(userId)).resolves.toHaveProperty('locked', null)
+        })
+    })
+
+    it('does not remove locked entry when it is not older than 24 hrs', async () => {
+      const newDate = Date.now() - 1000 * 60 * 60 * 12
+      await accounts.patch(userId, {locked: newDate})
+        .then(async () => {
+          await expect(accounts.get(userId)).resolves.toHaveProperty('locked', expect.any(String))
         })
     })
 
@@ -109,15 +126,15 @@ describe('\'accounts\' service', () => {
   describe('custom endpoints', () => {
     it('counts editors when accessing accounts/editors', async () => {
       let id: number
-      await app.service('accounts').create({
+      await accounts.create({
         username: 'myEditor',
         email: 'the@editor',
         password: 'veryverysecret',
         role: 'editor'
       }).then(async resp => {
         id = resp.id
-        await expect(app.service('accounts').get('editors')).resolves.toStrictEqual({editors: 1})
-        await app.service('accounts').remove(id).catch((err: Error) => {
+        await expect(accounts.get('editors')).resolves.toStrictEqual({editors: 1})
+        await accounts.remove(id).catch((err: Error) => {
           throw err
         })
       })

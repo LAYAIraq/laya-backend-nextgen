@@ -7,6 +7,7 @@ import setRole from '../../hooks/set-role'
 import purgeUserPrefs from '../../hooks/purge-user-prefs'
 import augmentAccountsApi from '../../hooks/augment-accounts-api'
 import { isProvider, iff } from 'feathers-hooks-common'
+import unlockAccount from '../../hooks/unlock-account'
 // import userAppearancePrefsModel from '../../models/user-appearance-prefs.model'
 // Don't remove this comment. It's needed to format import lines nicely.
 
@@ -32,6 +33,7 @@ export default {
 
   after: {
     all: [
+      unlockAccount(),
       // Make sure the password field is never sent to the client
       // Always must be the last hook
       protect('password')
