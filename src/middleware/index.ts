@@ -6,6 +6,7 @@ import resetPassword from './reset-password'
 import setNewPassword from './set-new-password'
 import nameTaken from './name-taken'
 import emailTaken from './email-taken'
+import editors from './editors'
 // Don't remove this comment. It's needed to format import lines nicely.
 
 export default function (app: Application): void {
@@ -15,4 +16,5 @@ export default function (app: Application): void {
   app.use('/accounts/set-pwd', setNewPassword(app))
   app.use('/accounts/name/:name', nameTaken(app))
   app.use('/accounts/email/:email', emailTaken(app))
+  app.use('/accounts/editors', editors(app))
 }

@@ -5,7 +5,6 @@ import createUserPrefs from '../../hooks/create-user-prefs'
 // import debug from '../../hooks/debug'
 import setRole from '../../hooks/set-role'
 import purgeUserPrefs from '../../hooks/purge-user-prefs'
-import augmentAccountsApi from '../../hooks/augment-accounts-api'
 import { isProvider, iff } from 'feathers-hooks-common'
 import unlockAccount from '../../hooks/unlock-account'
 // import userAppearancePrefsModel from '../../models/user-appearance-prefs.model'
@@ -20,7 +19,6 @@ export default {
     find: [iff(isProvider('rest'), authenticate('jwt'))],
     get: [
       // iff(isProvider('rest'), authenticate('jwt')),
-      augmentAccountsApi()
     ],
     create: [setRole(), hashPassword('password')],
     update: [hashPassword('password'), authenticate('jwt')],
@@ -36,7 +34,7 @@ export default {
       unlockAccount(),
       // Make sure the password field is never sent to the client
       // Always must be the last hook
-      protect('password')
+      protect('password', 'verificationToken')
     ],
     find: [],
     get: [],

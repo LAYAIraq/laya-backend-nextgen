@@ -73,6 +73,7 @@ describe('\'accounts\' service', () => {
 
     it('removes prefs when removing user', async () => {
       const findIf = (service: string, id: number) => {
+        // @ts-ignore
         return app.service(service).find({
           query: {
             id: id,
@@ -109,24 +110,5 @@ describe('\'accounts\' service', () => {
         })
     })
 
-  })
-
-  describe('custom endpoints', () => {
-    it('counts editors when accessing accounts/editors', async () => {
-      let id: number
-      await accounts.create({
-        username: 'myEditor',
-        email: 'the@editor',
-        password: 'veryverysecret',
-        role: 'editor'
-      }).then(async resp => {
-        id = resp.id
-        await expect(accounts.get('editors')).resolves.toStrictEqual({editors: 1})
-        await accounts.remove(id).catch((err: Error) => {
-          throw err
-        })
-      })
-
-    })
   })
 })
