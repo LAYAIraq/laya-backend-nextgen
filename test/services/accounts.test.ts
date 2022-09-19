@@ -45,14 +45,12 @@ describe('\'accounts\' service', () => {
         .then(resp => {
           userId = resp.id
         })
-        .catch(() => {
-          throw new Error('user already exists')
-        })
     })
 
     afterEach(async () => {
-      await accounts.remove(userId)
-        .catch(() => 'user not found')
+      if (userId !== 0) {
+        await accounts.remove(userId)
+      }
     })
 
     it('also created an entry in appearance prefs', async () => {
@@ -92,6 +90,7 @@ describe('\'accounts\' service', () => {
           resp = await findIf('user-media-prefs', userId)
           expect(resp.total).toBe(0)
         })
+      userId = 0
     })
 
     it('removes locked entry when it is older than 24 hrs', async () => {

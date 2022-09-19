@@ -18,10 +18,7 @@ describe('Confirm Email middleware', () => {
   })
 
   afterAll(async () => {
-    await app.service('accounts').find({query: {email: 'confirm-test'}})
-      .then(async(resp: any) => {
-        await app.service('accounts').remove(resp.data[0].id)
-      })
+    await app.service('accounts').remove(uid)
   })
 
   it('should return a 400 with no params', async () => {
@@ -39,17 +36,17 @@ describe('Confirm Email middleware', () => {
     expect(testUser.data[0].verificationToken).toBeNull()
   })
 
-  it('should return a 400 with wrong token', async () => {
+  it('should return a 403 with wrong token', async () => {
     const response = await request(app)
       .post('/accounts/confirm')
       .send({ uid, token: 'wrong token' })
-    expect(response.status).toBe(400)
+    expect(response.status).toBe(403)
   })
 
-  it('should return a 400 with wrong request', async () => {
+  it('should return a 406 with wrong request', async () => {
     const response = await request(app)
       .get('/accounts/confirm')
       .send({ uid, token })
-    expect(response.status).toBe(400)
+    expect(response.status).toBe(406)
   })
 })

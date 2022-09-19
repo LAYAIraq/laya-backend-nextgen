@@ -1,6 +1,10 @@
 import app from '../../src/app'
 // @ts-ignore
 import request from 'supertest'
+// @ts-ignore
+import getAuthenticationToken from '../helpers/get-authentication-token'
+// @ts-ignore
+import sendAuthenticatedRequest from '../helpers/send-authenticated-request'
 
 const accounts = app.service('accounts')
 describe('editors middleware', () => {
@@ -21,8 +25,7 @@ describe('editors middleware', () => {
     await accounts.create({
       username: 'myNonEditor',
       email: 'the@normaluser',
-      password: 'veryverysecret',
-      role: 'student'
+      password: 'veryverysecret'
     })
       .then((resp: any) => {
         studentId = resp.id
@@ -38,6 +41,14 @@ describe('editors middleware', () => {
     await request(app)
       .get('/accounts/editors')
       .expect(401)
+  })
+
+  it('fails with wrong http method', async () => {
+    const token = await getAuthenticationToken('the@editor', 'veryverysecret')
+    await sendAuthenticatedRequest(app, 'post', '/accounts/editors', token)
+      .then((resp: any) => {
+        expect(resp.status).toBe(405)
+      })
   })
 
   it('fails for non-editor request', async () => {
@@ -57,19 +68,9 @@ describe('editors middleware', () => {
   })
 
   it('succeeds for editor request', async () => {
-    let resp = await request(app)
-      .post('/authentication')
-      .set('Accept', 'application/json')
-      .set('Content-Type', 'application/json')
-      .send({ strategy: 'local', email: 'the@editor', password: 'veryverysecret' })
-
-    const token = resp.body.accessToken
-    resp = await request(app)
-      .get('/accounts/editors')
-      .set('Accept', 'application/json')
-      .set('Content-Type', 'application/json')
-      .set('Authorization', `Bearer ${token}`)
-      .expect(200)
-    expect(resp.body.editors).toBe(1)
+    const token = await getAuthenticationToken('the@editor', 'veryverysecret')
+    const resp = await sendAuthenticatedRequest(app, 'get', '/accounts/editors', token)
+    expect(resp.status).toBe(200)
+    expect(resp.body.editors).toBeGreaterThanOrEqual(1)
   })
 })

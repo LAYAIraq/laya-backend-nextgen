@@ -1,6 +1,5 @@
 import * as feathersAuthentication from '@feathersjs/authentication'
 import * as local from '@feathersjs/authentication-local'
-// import { HookContext } from '@feathersjs/feathers'
 import createUserPrefs from '../../hooks/create-user-prefs'
 // import debug from '../../hooks/debug'
 import setRole from '../../hooks/set-role'

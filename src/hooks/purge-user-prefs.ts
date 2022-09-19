@@ -8,13 +8,13 @@ export default (options = {}): Hook => {
     await context.app.service('user-appearance-prefs').remove(context.id)
       // .then((resp: any) => console.log(resp))
       .catch((err: Error) => {
-        throw err
+        console.error(err.message)
       })
 
     await context.app.service('user-media-prefs').remove(context.id)
       // .then((resp: any) => console.log(resp))
       .catch((err: Error) => {
-        throw err
+        console.error(err.message)
       })
 
     return context

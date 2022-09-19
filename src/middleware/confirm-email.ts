@@ -23,13 +23,13 @@ export default (app: Application) => (req: Request, res: Response): void => {
               throw err
             })
         } else {
-          res.status(400).send(new NotAcceptable('wrong verification'))
+          res.status(403).send(new Forbidden('wrong verification'))
         }
       })
       .catch((err: Error) => {
         res.status(400).send(err)
       })
   } else {
-    res.status(400).send(new NotAcceptable('wrong request'))
+    res.status(406).send(new NotAcceptable('wrong request'))
   }
 }

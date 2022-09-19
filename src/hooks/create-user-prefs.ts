@@ -6,8 +6,16 @@ import { Hook, HookContext } from '@feathersjs/feathers'
 export default (options = {}): Hook => {
   return async (context: HookContext): Promise<HookContext> => {
     // console.log(context.result)
-    context.app.service('user-appearance-prefs').create({ id: context.result.id })
-    context.app.service('user-media-prefs').create({ id: context.result.id })
+    context.app.service('user-appearance-prefs')
+      .create({ id: context.result.id })
+      .catch((err: Error) => {
+        console.error(err.message)
+      })
+    context.app.service('user-media-prefs')
+      .create({ id: context.result.id })
+      .catch((err: Error) => {
+        console.error(err.message)
+      })
     // console.log(prefs)
     return context
   }

@@ -28,7 +28,9 @@ describe('createUser middleware', () => {
     afterEach(async () => {
       await app.service('accounts').find({ query: {email: user.email} })
       .then(async (resp: any) => {
-        await app.service('accounts').remove(resp.data[0].id)
+        if (resp.data.length > 0) {
+          await app.service('accounts').remove(resp.data[0].id)
+        }
       })
     })
 
@@ -84,8 +86,9 @@ describe('createUser middleware', () => {
         password: 'admin',
         role: 'admin'
       }).
-        then((resp: any) => {
+        then(async (resp: any) => {
           adminId = resp.id
+          token = await getAuthenticationToken('admin@admin', 'admin')
         })
     })
 
@@ -93,9 +96,6 @@ describe('createUser middleware', () => {
       await app.service('accounts').remove(adminId)
     })
 
-    beforeEach(async () => {
-      token = await getAuthenticationToken('admin@admin', 'admin')
-    })
     afterEach(async () => {
       await app.service('accounts').find({query: {username: 'create-test'}})
         .then(async (users: any) => {

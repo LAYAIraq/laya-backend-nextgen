@@ -17,14 +17,14 @@ describe('nameTaken middleware', () => {
   })
 
   it('fails when name not present', async () => {
-    await request(app).get('/accounts/email/somenamethatisnotthere').expect(404)
+    await request(app).get('/accounts/name/somenamethatisnotthere').expect(404)
   })
 
   it('fails with wrong http method', async () => {
     await request(app).post('/accounts/name/name-test').expect(400)
   })
 
-  it('returns true when email present', async () => {
+  it('returns true when name present', async () => {
     await app.service('accounts').create({
       username: 'name-test',
       email: 'test@test',
