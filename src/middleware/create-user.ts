@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { Application } from '../declarations'
-import randomPassword from '../misc/randomPassword'
+import randomPassword from '../misc/random-password'
 import roles from '../misc/roles'
 
 export default (app: Application) => (req: Request, res: Response): void => {

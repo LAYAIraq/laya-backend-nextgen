@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { Application } from '../declarations'
-import randomPassword from '../misc/randomPassword'
+import randomPassword from '../misc/random-password'
 import createVerificationToken from '../misc/create-verification-token'
 
 export default (app: Application) => (req: Request, res: Response): void => {

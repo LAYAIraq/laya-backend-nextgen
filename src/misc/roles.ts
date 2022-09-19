@@ -1,9 +1,7 @@
 /**
- * Filename: roles.ts
- * Use: Define user roles
- * Author: cmc
- * Date: June 15, 2022
- * Dependencies: none
+ * @file roles.ts - define user roles
+ * @author cmc
+ * @since v0.0.1
  */
 
 export default {

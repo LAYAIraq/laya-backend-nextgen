@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { Application } from '../declarations'
-import { NotAuthenticated, Forbidden } from '@feathersjs/errors'
+import { MethodNotAllowed } from '@feathersjs/errors'
+import checkAuthentication from '../misc/check-authentication'
 
 export default (app: Application) => (req: Request, res: Response): void => {
   const countEditors = (): void => {
@@ -23,26 +24,9 @@ export default (app: Application) => (req: Request, res: Response): void => {
   // console.log(req.query)
   // console.log(req.headers)
 
-  if (typeof (req.headers.authorization) !== 'undefined') {
-    const token = req.headers.authorization.split(' ')[1]
-    // console.log(token)
-    app.service('authentication').verifyAccessToken(token)
-      .then((payload) => {
-        // console.log(payload)
-        app.service('accounts').get(payload.sub)
-          .then((user) => {
-            user.role === 'editor'
-              ? countEditors()
-              : res.status(403).send(new Forbidden('You are not an editor'))
-          })
-          .catch(() => {
-            throw new NotAuthenticated('Invalid token')
-          })
-      })
-      .catch(() => {
-        throw new NotAuthenticated('Invalid token')
-      })
+  if (req.method === 'GET') {
+    checkAuthentication(app, req, res, 'editor', countEditors)
   } else {
-    res.status(401).send(new NotAuthenticated('only authenticated users can access this'))
+    res.status(405).send(new MethodNotAllowed('Wrong http method'))
   }
 }
