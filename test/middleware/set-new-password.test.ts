@@ -1,4 +1,5 @@
 import app from '../../src/app'
+// @ts-ignore
 import request from 'supertest'
 // @ts-ignore
 import createUser from '../helpers/create-test-user'

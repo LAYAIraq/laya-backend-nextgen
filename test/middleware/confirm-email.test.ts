@@ -1,4 +1,5 @@
 import app from '../../src/app'
+// @ts-ignore
 import request from 'supertest'
 
 describe('Confirm Email middleware', () => {
