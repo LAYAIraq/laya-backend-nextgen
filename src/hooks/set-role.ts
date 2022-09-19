@@ -1,5 +1,8 @@
-// Use this hook to manipulate incoming or outgoing data.
-// For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
+/**
+ * @file set-role.ts - set role to student if none specified
+ * @author cmc
+ * @since v0.0.1
+ */
 import { Hook, HookContext } from '@feathersjs/feathers'
 import { BadRequest } from '@feathersjs/errors'
 import roles from '../misc/roles'

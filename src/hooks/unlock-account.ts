@@ -1,5 +1,8 @@
-// Use this hook to manipulate incoming or outgoing data.
-// For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
+/**
+ * @file unlock-account.ts - check if account is locked and unlock it if locked flag is older than 24 hours
+ * @author cmc
+ * @since v0.0.1
+ */
 import { Hook, HookContext } from '@feathersjs/feathers'
 // import { Model } from 'sequelize'
 

@@ -1,8 +1,21 @@
+/**
+ * @file editors.ts - middleware to return the number of editors
+ * @author cmc
+ * @since v0.0.1
+ */
 import { Request, Response } from 'express'
 import { Application } from '../declarations'
 import { MethodNotAllowed } from '@feathersjs/errors'
 import checkAuthentication from '../misc/check-authentication'
 
+/**
+ * @function return the number of editors, editors only
+ * @author cmc
+ *
+ * @param app The feathers application
+ * @param req The request
+ * @param res The response
+ */
 export default (app: Application) => (req: Request, res: Response): void => {
   const countEditors = (): void => {
     app.service('accounts').find({

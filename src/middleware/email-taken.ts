@@ -1,7 +1,20 @@
+/**
+ * @file email-taken.ts - check if email is already taken
+ * @author cmc
+ * @since v0.0.1
+ */
 import { Request, Response } from 'express'
 import { Application } from '../declarations'
 import { NotFound, BadRequest, GeneralError } from '@feathersjs/errors'
 
+/**
+ * @function check if email is already taken
+ * @author cmc
+ *
+ * @param app The feathers application
+ * @param req The request, has to contain email in params
+ * @param res The response
+ */
 export default (app: Application) => (req: Request, res: Response): void => {
   if (typeof (req.params) !== 'undefined' && req.method === 'GET') {
     // console.log(req.params)

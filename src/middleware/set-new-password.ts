@@ -1,6 +1,19 @@
+/**
+ * @file set-new-password.ts - set new password for user
+ * @author cmc
+ * @since v0.0.1
+ */
 import { Request, Response } from 'express'
 import { Application } from '../declarations'
 
+/**
+ * @function set new password for user with verification token
+ * @author cmc
+ *
+ * @param app The feathers application
+ * @param req The request, has to contain user id, password and token in body
+ * @param res The response
+ */
 export default (app: Application) => (req: Request, res: Response): void => {
   const accounts = app.service('accounts')
   const { userId, verificationToken, password } = req.body

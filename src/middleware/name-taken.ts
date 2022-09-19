@@ -1,3 +1,8 @@
+/**
+ * @file name-taken.ts - check if name is already taken
+ * @author cmc
+ * @since v0.0.1
+ */
 import { Request, Response } from 'express'
 import { Application } from '../declarations'
 import { NotFound, BadRequest } from '@feathersjs/errors'
