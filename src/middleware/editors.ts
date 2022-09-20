@@ -38,7 +38,7 @@ export default (app: Application) => (req: Request, res: Response): void => {
   // console.log(req.headers)
 
   if (req.method === 'GET') {
-    checkAuthentication(app, req, res, 'editor', countEditors)
+    checkAuthentication(app, req, res, countEditors, 'editor')
   } else {
     res.status(405).send(new MethodNotAllowed('Wrong http method'))
   }

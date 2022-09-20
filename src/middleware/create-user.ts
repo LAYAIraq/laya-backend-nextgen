@@ -45,7 +45,7 @@ export default (app: Application) => (req: Request, res: Response): void => {
 
   // check if request method is POST
   if (req.method === 'POST') {
-    checkAuthentication(app, req, res, 'admin', createUser)
+    checkAuthentication(app, req, res, createUser, 'admin')
   } else {
     res.status(405).send(new MethodNotAllowed('wrong request'))
   }
