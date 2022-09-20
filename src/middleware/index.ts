@@ -8,9 +8,11 @@ import nameTaken from './name-taken'
 import emailTaken from './email-taken'
 import editors from './editors'
 import userRole from './user-role'
+import userChangeLanguage from './user-change-language'
 // Don't remove this comment. It's needed to format import lines nicely.
 
 export default function (app: Application): void {
+  app.use('/accounts/:id/change-language/', userChangeLanguage(app))
   app.use('/accounts/:id/role', userRole(app))
   app.use('/accounts/confirm', confirmEmail(app))
   app.use('/accounts/create', createUser(app))
