@@ -56,7 +56,7 @@ export default function (app: Application): typeof Model {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (accounts as any).associate = function (models: any): void {
-    accounts.hasOne(models.author_applications)
+    // accounts.hasOne(models.author_applications)
     // accounts.hasOne(models.user_appearance_prefs)
     // accounts.hasOne(models.user_media_prefs)
     // accounts.hasMany(models.courses)
