@@ -1,5 +1,5 @@
 /**
- * @file set-new-password.ts - set new password for user
+ * @file account-password-set.ts - set new password for user
  * @author cmc
  * @since v0.0.1
  */

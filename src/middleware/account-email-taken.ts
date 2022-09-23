@@ -1,5 +1,5 @@
 /**
- * @file email-taken.ts - check if email is already taken
+ * @file account-email-taken.ts - check if email is already taken
  * @author cmc
  * @since v0.0.1
  */

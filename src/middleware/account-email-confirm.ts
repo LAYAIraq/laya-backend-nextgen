@@ -1,5 +1,5 @@
 /**
- * @file confirm-email.ts - confirm email with token
+ * @file account-email-confirm.ts - confirm email with token
  * @author cmc
  * @since v0.0.1
  */

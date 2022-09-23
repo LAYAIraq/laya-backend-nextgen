@@ -1,5 +1,5 @@
 /**
- * @file user-role.ts - middleware for user role
+ * @file account-role.ts - middleware for user role
  * @author cmc
  * @since v0.0.1
  */

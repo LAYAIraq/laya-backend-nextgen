@@ -1,5 +1,5 @@
 /**
- * @file reset-password.ts - reset password
+ * @file account-password-reset.ts - reset password
  * @author cmc
  * @since v0.0.1
  */

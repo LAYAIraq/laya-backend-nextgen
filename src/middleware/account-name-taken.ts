@@ -1,5 +1,5 @@
 /**
- * @file name-taken.ts - check if name is already taken
+ * @file account-name-taken.ts - check if name is already taken
  * @author cmc
  * @since v0.0.1
  */

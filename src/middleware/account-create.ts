@@ -1,5 +1,5 @@
 /**
- * @file create-user.ts - create a new user, admin only
+ * @file account-create.ts - create a new user, admin only
  * @author cmc
  * @since v0.0.1
  */

@@ -1,5 +1,5 @@
 /**
- * @file editors.ts - middleware to return the number of editors
+ * @file editors-count.ts - middleware to return the number of editors
  * @author cmc
  * @since v0.0.1
  */
