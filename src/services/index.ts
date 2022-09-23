@@ -17,6 +17,7 @@ import flags from './flags/flags.service'
 import notifications from './notifications/notifications.service'
 import userAppearancePrefs from './accounts/user-appearance-prefs/user-appearance-prefs.service'
 import userMediaPrefs from './accounts/user-media-prefs/user-media-prefs.service'
+import editorVoteHistory from './editor-vote-history/editor-vote-history.service'
 // Don't remove this comment. It's needed to format import lines nicely.
 
 export default function (app: Application): void {
@@ -38,4 +39,5 @@ export default function (app: Application): void {
   app.configure(notifications)
   app.configure(userAppearancePrefs)
   app.configure(userMediaPrefs)
+  app.configure(editorVoteHistory)
 }

@@ -6,14 +6,13 @@ import { HookReturn } from 'sequelize/types/hooks'
 
 export default function (app: Application): typeof Model {
   const sequelizeClient: Sequelize = app.get('sequelizeClient')
-  const editorVotes = sequelizeClient.define('editor_votes', {
-    edited: {
+  const editorVoteHistory = sequelizeClient.define('editor_vote_history', {
+    vote: {
       type: DataTypes.BOOLEAN
     },
-    vote: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false
+    date: {
+      type: DataTypes.DATE,
+      allowNull: false
     }
   }, {
     hooks: {
@@ -24,10 +23,11 @@ export default function (app: Application): typeof Model {
   });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  (editorVotes as any).associate = function (models: any): void {
-    editorVotes.belongsTo(models.accounts, { foreignKey: 'editorId' })
-    editorVotes.belongsTo(models.author_applications, { foreignKey: 'applicationId' })
+  (editorVoteHistory as any).associate = function (models: any): void {
+    editorVoteHistory.belongsTo(models.editor_votes, {
+      foreignKey: 'voteId'
+    })
   }
 
-  return editorVotes
+  return editorVoteHistory
 }

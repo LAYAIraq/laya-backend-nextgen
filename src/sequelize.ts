@@ -27,7 +27,7 @@ export default function (app: Application): void {
 
     // Sync to the database
     app.set('sequelizeSync', sequelize.sync({
-      force: process.env.TS_NODE_DEV === 'true'
+      force: process.env.TS_NODE_DEV === 'true' || process.env.NODE_ENV === 'test'
     }))
 
     return result

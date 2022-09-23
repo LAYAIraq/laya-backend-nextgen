@@ -1,19 +1,15 @@
-// import { HooksObject } from '@feathersjs/feathers'
+// import { HooksObject } from '@feathersjs/feathers';
 import * as authentication from '@feathersjs/authentication'
-import debug from '../../hooks/debug'
-import verifyRole from '../../hooks/verify-role'
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const { authenticate } = authentication.hooks
 
 export default {
   before: {
-    all: [
-      authenticate('jwt')
-    ],
+    all: [authenticate('jwt')],
     find: [],
     get: [],
-    create: [debug(), verifyRole({ expectedRole: 'editor' })],
+    create: [],
     update: [],
     patch: [],
     remove: []
@@ -30,7 +26,7 @@ export default {
   },
 
   error: {
-    all: [debug()],
+    all: [],
     find: [],
     get: [],
     create: [],

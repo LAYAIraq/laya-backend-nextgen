@@ -30,7 +30,8 @@ export default function (app: Application): typeof Model {
       allowNull: false
     },
     status: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      defaultValue: 'pending'
     }
 
   }, {
@@ -43,14 +44,9 @@ export default function (app: Application): typeof Model {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (authorApplications as any).associate = function (models: any): void {
-    authorApplications.belongsTo(models.accounts, {
-      foreignKey: {
-        name: 'applicantId',
-        allowNull: false
-      }
-    })
-    authorApplications.hasMany(models.application_history)
-    authorApplications.hasMany(models.editor_votes)
+    authorApplications.belongsTo(models.accounts, { foreignKey: 'applicantId' })
+    // authorApplications.hasMany(models.application_history)
+    // authorApplications.hasMany(models.editor_votes)
   }
 
   return authorApplications
