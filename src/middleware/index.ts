@@ -22,4 +22,5 @@ export default function (app: Application): void {
   app.use('/accounts/name/:name', nameTaken(app))
   app.use('/accounts/email/:email', emailTaken(app))
   app.use('/accounts/editors', editors(app))
+  app.use('/accounts/:id/change-role', accountChangeRole())
 }
