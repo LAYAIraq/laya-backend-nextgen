@@ -2,11 +2,13 @@ import app from '../../src/app'
 // @ts-ignore
 import {createTestUser} from '../helpers'
 import {NotFound} from '@feathersjs/errors'
+import request from 'supertest'
 
 describe('\'editor-votes\' service', () => {
   let editorId: number
   let studentId: number
   let applicationId: number
+  let voteId: number
 
   beforeAll(async () => {
     await createTestUser({
@@ -34,13 +36,14 @@ describe('\'editor-votes\' service', () => {
 
   beforeEach(async () => {
     await app.service('author-applications').create({
-      applicantId: studentId,
       applicationText: 'test application',
       areaOfExpertise: 'test area of expertise',
       fullName: 'test full name',
-      institution: 'test institution'
+      institution: 'test institution',
+      applicantId: studentId
     })
     .then((resp: any) => {
+      // console.log(resp)
       applicationId = resp.id
     })
     .catch((err: any) => {
@@ -49,16 +52,7 @@ describe('\'editor-votes\' service', () => {
   })
 
   afterEach(async () => {
-    await app.service('editor-votes').find({query: {applicationId, editorId}})
-      .then((resp: any) => {
-        resp.data.forEach(async (vote: any) => {
-          await app.service('editor-votes').remove(vote.id)
-        })
-      })
-      .catch((err: any) => {
-        console.warn(err.message)
-        console.log(err)
-      })
+    if (voteId) await app.service('editor-votes').remove(voteId)
     await app.service('author-applications').remove(applicationId)
     .catch((err: any) => {
       console.warn(err.message)
@@ -77,19 +71,23 @@ describe('\'editor-votes\' service', () => {
   })
 
   it('creates a vote for editor', async () => {
-    console.log('editorId', editorId)
-    console.log('studentId', studentId)
-    console.log('applicationId', applicationId)
     const vote = await app.service('editor-votes').create({
       vote: true,
-      editorId: editorId,
-      applicationId: applicationId
+      editorId,
+      applicationId
     })
-    console.log('vote', vote)
+      .catch((err: any) => {
+        console.log(err.message)
+        console.log(err)
+        throw err
+    })
+    voteId = vote.id
     expect(vote).toHaveProperty('vote', true)
+    // expect(vote).toHaveProperty('editorId', editorId)
+    // expect(vote).toHaveProperty('applicationId', applicationId)
 
     // await expect(app.service('editor-votes').find({query: {editorId, applicationId}})).resolves.toHaveProperty('data'), expect(Array).toHaveLength(1)
-    const votes: any = await app.service('editor-votes').find({query: {editorId, applicationId}})
+    const votes: any = await app.service('editor-votes').find({query: {id: voteId}})
     expect(votes.data).toHaveLength(1)
     // await app.service('author-applications').remove(applicationId)
   })

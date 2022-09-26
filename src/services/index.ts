@@ -1,6 +1,5 @@
 import { Application } from '../declarations'
 import accounts from './accounts/accounts.service'
-import applicationHistory from './author-applications/application-history/application-history.service'
 import authorApplications from './author-applications/author-applications.service'
 import contentInputDialog from './courses/content-input-dialog/content-input-dialog.service'
 import contentInputDragDrop from './courses/content-input-drag-drop/content-input-drag-drop.service'
@@ -22,7 +21,6 @@ import editorVoteHistory from './editor-vote-history/editor-vote-history.service
 
 export default function (app: Application): void {
   app.configure(accounts)
-  app.configure(applicationHistory)
   app.configure(authorApplications)
   app.configure(contentInputDialog)
   app.configure(contentInputDragDrop)

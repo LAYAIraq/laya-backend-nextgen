@@ -1,11 +1,11 @@
 import * as feathersAuthentication from '@feathersjs/authentication'
 import * as local from '@feathersjs/authentication-local'
-import createUserPrefs from '../../hooks/create-user-prefs'
+import createUserPrefs from '../../hooks/account-prefs-create'
 // import debug from '../../hooks/debug'
-import setRole from '../../hooks/set-role'
-import purgeUserPrefs from '../../hooks/purge-user-prefs'
+import setRole from '../../hooks/account-role-set'
+import purgeUserPrefs from '../../hooks/account-prefs-purge'
 import { isProvider, iff } from 'feathers-hooks-common'
-import unlockAccount from '../../hooks/unlock-account'
+import unlockAccount from '../../hooks/account-unlock'
 // import userAppearancePrefsModel from '../../models/user-appearance-prefs.model'
 // Don't remove this comment. It's needed to format import lines nicely.
 
