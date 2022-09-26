@@ -17,10 +17,12 @@ import notifications from './notifications/notifications.service'
 import userAppearancePrefs from './accounts/user-appearance-prefs/user-appearance-prefs.service'
 import userMediaPrefs from './accounts/user-media-prefs/user-media-prefs.service'
 import editorVoteHistory from './editor-vote-history/editor-vote-history.service'
+import authorApplicationHistory from './author-application-history/author-application-history.service'
 // Don't remove this comment. It's needed to format import lines nicely.
 
 export default function (app: Application): void {
   app.configure(accounts)
+  app.configure(authorApplicationHistory)
   app.configure(authorApplications)
   app.configure(contentInputDialog)
   app.configure(contentInputDragDrop)
@@ -30,6 +32,7 @@ export default function (app: Application): void {
   app.configure(contentInputWysiwyg)
   app.configure(courseContent)
   app.configure(courses)
+  app.configure(editorVoteHistory)
   app.configure(editorVotes)
   app.configure(enrollments)
   app.configure(flagAnswers)
@@ -37,5 +40,4 @@ export default function (app: Application): void {
   app.configure(notifications)
   app.configure(userAppearancePrefs)
   app.configure(userMediaPrefs)
-  app.configure(editorVoteHistory)
 }

@@ -44,7 +44,12 @@ export default function (app: Application): typeof Model {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (authorApplications as any).associate = function (models: any): void {
-    authorApplications.belongsTo(models.accounts, { foreignKey: 'applicantId' })
+    authorApplications.belongsTo(models.accounts, {
+      foreignKey: {
+        name: 'applicantId',
+        allowNull: false
+      }
+    })
     // authorApplications.hasMany(models.application_history)
     // authorApplications.hasMany(models.editor_votes)
   }
