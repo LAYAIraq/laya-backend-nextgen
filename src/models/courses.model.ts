@@ -9,6 +9,7 @@ export default function (app: Application): typeof Model {
   const courses = sequelizeClient.define('courses', {
     courseId: {
       type: DataTypes.UUIDV4,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true
     },
     name: {
@@ -41,8 +42,8 @@ export default function (app: Application): typeof Model {
     // Define associations here
     courses.belongsTo(models.accounts, {
       foreignKey: {
-        name: 'authorId',
-        allowNull: false
+        name: 'authorId'
+        // allowNull: false
       }
     })
 
