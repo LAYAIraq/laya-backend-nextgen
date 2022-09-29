@@ -1,6 +1,6 @@
 // import { HooksObject } from '@feathersjs/feathers'
 import * as authentication from '@feathersjs/authentication'
-import debug from '../../hooks/debug'
+import { debug } from 'feathers-hooks-common'
 import verifyRole from '../../hooks/role-verify'
 // Don't remove this comment. It's needed to format import lines nicely.
 
@@ -13,7 +13,7 @@ export default {
     ],
     find: [],
     get: [],
-    create: [debug(), verifyRole({ expectedRole: 'editor' })],
+    create: [debug('role check:'), verifyRole('editor')],
     update: [],
     patch: [],
     remove: []
@@ -30,7 +30,7 @@ export default {
   },
 
   error: {
-    all: [debug()],
+    all: [],
     find: [],
     get: [],
     create: [],

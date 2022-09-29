@@ -1,26 +1,30 @@
-// Use this hook to manipulate incoming or outgoing data.
-// For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
+/**
+ * @file role-verify.ts - verify that user has the required role
+ * @author cmc
+ * @since v0.0.1
+ */
 import { Hook, HookContext } from '@feathersjs/feathers'
 import { Forbidden, NotFound } from '@feathersjs/errors'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default (options: {
-  expectedRole: string | [ string ]
+/**
+ * @function verify that the foreign key is the one of the resource to be modified
+ * @param expectedRole - the role that the user must have
+ * @param identifier - the name of the foreign key in the resource, omit to use params.id
+ */
+export default (
+  expectedRole: string | string[],
   identifier?: string
-}): Hook => {
+): Hook => {
   return async (context: HookContext): Promise<HookContext> => {
-    console.log(context.data)
-    console.log(context.params)
-    console.log(options.expectedRole)
-    await context.app.service('accounts').get(options.identifier !== undefined ? context.data[options.identifier] : context.params.id)
-      .catch((err: Error) => {
-        console.error(err.message)
+    await context.app.service('accounts').get(identifier !== undefined ? context.data[identifier] : context.params.id)
+      .catch(() => {
+        // console.error(err.message)
         throw new NotFound('user does not exist')
       })
       .then((user: any) => {
-        if (typeof (options.expectedRole) === 'object'
-          ? !options.expectedRole.includes(user.role)
-          : user.role !== options.expectedRole) {
+        if (typeof (expectedRole) === 'object'
+          ? !expectedRole.includes(user.role)
+          : user.role !== expectedRole) {
           throw new Forbidden('You do not have permission to perform this action')
         }
       })
