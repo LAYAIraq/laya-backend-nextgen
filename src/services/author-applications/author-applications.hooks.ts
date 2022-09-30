@@ -2,8 +2,9 @@
 import * as authentication from '@feathersjs/authentication'
 import authorApplicationHistoryCreate from '../../hooks/author-application-history-create'
 import roleVerify from '../../hooks/role-verify'
-import { debug } from 'feathers-hooks-common'
-import authorApplicationHistoryPurge from '../../hooks/author-application-history-purge'
+// import { debug } from 'feathers-hooks-common'
+import historyPurge from '../../hooks/history-purge'
+import historyBundle from '../../hooks/history-bundle'
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const { authenticate } = authentication.hooks
@@ -23,16 +24,16 @@ export default {
       authorApplicationHistoryCreate()
     ],
     remove: [
-      debug('before delete'),
-      authorApplicationHistoryPurge(),
-      debug('after delete')
+      // debug('before delete'),
+      historyPurge('applicationId', 'author-application-history')
+      // debug('after delete')
     ]
   },
 
   after: {
     all: [],
     find: [],
-    get: [],
+    get: [historyBundle()],
     create: [],
     update: [],
     patch: [],

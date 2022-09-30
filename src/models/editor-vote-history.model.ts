@@ -9,10 +9,6 @@ export default function (app: Application): typeof Model {
   const editorVoteHistory = sequelizeClient.define('editor_vote_history', {
     vote: {
       type: DataTypes.BOOLEAN
-    },
-    date: {
-      type: DataTypes.DATE,
-      allowNull: false
     }
   }, {
     hooks: {

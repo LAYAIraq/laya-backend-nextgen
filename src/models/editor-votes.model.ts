@@ -7,9 +7,6 @@ import { HookReturn } from 'sequelize/types/hooks'
 export default function (app: Application): typeof Model {
   const sequelizeClient: Sequelize = app.get('sequelizeClient')
   const editorVotes = sequelizeClient.define('editor_votes', {
-    edited: {
-      type: DataTypes.BOOLEAN
-    },
     vote: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
