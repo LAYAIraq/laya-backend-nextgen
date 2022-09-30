@@ -21,6 +21,10 @@ export default function (app: Application): typeof Model {
     decidedOn: {
       type: DataTypes.DATE
     },
+    edited: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: null
+    },
     fullName: {
       type: DataTypes.STRING,
       allowNull: false
@@ -45,10 +49,7 @@ export default function (app: Application): typeof Model {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (authorApplications as any).associate = function (models: any): void {
     authorApplications.belongsTo(models.accounts, {
-      foreignKey: {
-        name: 'applicantId',
-        allowNull: false
-      }
+      foreignKey: 'applicantId'
     })
     // authorApplications.hasMany(models.application_history)
     // authorApplications.hasMany(models.editor_votes)
