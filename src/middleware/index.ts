@@ -11,6 +11,7 @@ import setNewPassword from './account-password-set'
 import userChangeLanguage from './account-language-change'
 import userRole from './account-role'
 import courseName from './course-name'
+import courseId from './course-id'
 // Don't remove this comment. It's needed to format import lines nicely.
 
 export default function (app: Application): void {
@@ -24,5 +25,6 @@ export default function (app: Application): void {
   app.use('/accounts/name/:name', nameTaken(app))
   app.use('/accounts/pwd-reset/:id', resetPassword(app))
   app.use('/accounts/set-pwd', setNewPassword(app))
+  app.use('/courses/id', courseId(app))
   app.use('/courses/name', courseName(app))
 }
