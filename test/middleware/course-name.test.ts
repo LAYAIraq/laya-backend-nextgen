@@ -24,7 +24,7 @@ describe('\'course-name\' middleware', () => {
       authorId: userId
     })
       .then((course: any) => {
-        courseId = course.id
+        courseId = course.courseId
       })
   })
 
@@ -34,7 +34,10 @@ describe('\'course-name\' middleware', () => {
   })
 
   it('should fail for wrong request', async () => {
-    await request(app).get('/courses/name').expect(405)
+    await request(app)
+      .post('/courses/name')
+      .send({ courseId })
+      .expect(405)
   })
 
   it('should return 401 if not authenticated', async () => {
