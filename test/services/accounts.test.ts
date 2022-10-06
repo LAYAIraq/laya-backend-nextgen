@@ -109,9 +109,7 @@ describe('\'accounts\' service', () => {
         })
     })
 
-    // skipped b/c seems to be an issue with feathers or sequelize
-    // filed issue https://github.com/feathersjs/feathers/issues/2778
-    it.skip('creates unique verification code', async () => {
+    it('creates unique verification code', async () => {
       let verificationCode: string
       for (let i = 0; i < 10; i++) {
         await createUser()

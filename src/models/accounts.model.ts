@@ -44,7 +44,7 @@ export default function (app: Application): typeof Model {
     },
     verificationToken: {
       type: DataTypes.UUID,
-      defaultValue: createVerificationToken(16)
+      defaultValue: () => createVerificationToken(16)
     }
   }, {
     hooks: {

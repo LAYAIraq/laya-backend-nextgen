@@ -9,9 +9,9 @@ describe('\'course-id\' middleware', () => {
   let userId: number
   beforeAll(async () => {
     await createTestUser({
-      email: 'test@user',
+      email: 'test@courseId',
       password: 'test',
-      username: 'test',
+      username: 'testCourseId',
       role: 'author'
     })
       .then((user) => {
@@ -52,13 +52,13 @@ describe('\'course-id\' middleware', () => {
   })
 
   it('should return 404 for non-existent courses', async () => {
-    const token = await getAuthenticationToken('test@user', 'test')
+    const token = await getAuthenticationToken('test@courseId', 'test')
     const resp = await sendAuthenticatedRequest(app, 'get', '/courses/id', token, {courseName: 'non-existent-course'})
     expect(resp.status).toBe(404)
   })
 
   it('should return the correct course id', async () => {
-    const token = await getAuthenticationToken('test@user', 'test')
+    const token = await getAuthenticationToken('test@courseId', 'test')
     const resp = await sendAuthenticatedRequest(app, 'get', '/courses/id', token, {courseName: 'Test Course'})
     expect(resp.status).toBe(200)
     expect(resp.body).toStrictEqual({ courseId })
