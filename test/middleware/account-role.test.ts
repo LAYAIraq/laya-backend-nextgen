@@ -2,9 +2,7 @@ import app from '../../src/app'
 // @ts-ignore
 import request from 'supertest'
 // @ts-ignore
-import getAuthenticationToken from '../helpers/get-authentication-token'
-// @ts-ignore
-import sendAuthenticatedRequest from '../helpers/send-authenticated-request'
+import { getAuthenticationToken, sendAuthenticatedRequest } from '../helpers'
 
 describe('userRole middleware', () => {
   let userId: number
