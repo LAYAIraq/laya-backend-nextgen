@@ -34,14 +34,14 @@ describe('enrollmentGetAll middleware', () => {
     await app.service('accounts').remove(userId)
     await app.service('courses').remove(courseId)
     await app.service('accounts').find({ query: { username: 'testStudent' } })
-      .then((res) => {
-        res.data.forEach(async (user) => {
+      .then((res: any) => {
+        res.data.forEach(async (user: any) => {
           await app.service('accounts').remove(user.id)
         })
       })
     await app.service('courses').find({ query: { name: 'testCourse' } })
-      .then((res) => {
-        res.data.forEach(async (course) => {
+      .then((res: any) => {
+        res.data.forEach(async (course: any) => {
           await app.service('courses').remove(course.id)
         })
       })
