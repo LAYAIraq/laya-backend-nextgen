@@ -1,16 +1,18 @@
 import { disallow } from 'feathers-hooks-common'
-import { historyBundle, historyCreate, historyPurge } from '../../../hooks'
+import { historyBundle, historyPurge, historyCreate } from '../../../hooks'
 // Don't remove this comment. It's needed to format import lines nicely.
 
 export default {
   before: {
-    all: [disallow('external')],
+    all: [
+      disallow('external')
+    ],
     find: [],
-    get: [historyBundle('answerId', 'history')],
+    get: [historyBundle('questionId', 'history')],
     create: [],
-    update: [historyCreate('answerId', 'text')],
+    update: [historyCreate('questionId', 'text')],
     patch: [],
-    remove: [historyPurge('answerId')]
+    remove: [historyPurge('questionId')]
   },
 
   after: {

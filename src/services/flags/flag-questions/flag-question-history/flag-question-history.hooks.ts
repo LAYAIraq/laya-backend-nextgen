@@ -1,18 +1,14 @@
-// import { HooksObject } from '@feathersjs/feathers';
-import * as authentication from '@feathersjs/authentication'
-import { associationUpdate } from '../../hooks'
+import { disallow } from 'feathers-hooks-common'
 // Don't remove this comment. It's needed to format import lines nicely.
-
-const { authenticate } = authentication.hooks
 
 export default {
   before: {
-    all: [authenticate('jwt')],
+    all: [disallow('external')],
     find: [],
     get: [],
     create: [],
-    update: [associationUpdate(['question', 'flag-questions'])],
-    patch: [associationUpdate(['question', 'flag-questions'])],
+    update: [],
+    patch: [],
     remove: []
   },
 

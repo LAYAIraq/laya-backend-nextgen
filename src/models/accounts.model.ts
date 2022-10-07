@@ -60,6 +60,12 @@ export default function (app: Application): typeof Model {
     // accounts.hasOne(models.user_appearance_prefs)
     // accounts.hasOne(models.user_media_prefs)
     // accounts.hasMany(models.courses)
+    accounts.hasMany(models.flags, {
+      foreignKey: 'authorId'
+    })
+    accounts.hasMany(models.flag_answers, {
+      foreignKey: 'authorId'
+    })
   }
 
   return accounts

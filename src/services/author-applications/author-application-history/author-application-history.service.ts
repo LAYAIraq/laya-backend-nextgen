@@ -1,12 +1,12 @@
 // Initializes the `authorApplicationHistory` service on path `/author-application-history`
 import { ServiceAddons } from '@feathersjs/feathers'
-import { Application } from '../../declarations'
+import { Application } from '../../../declarations'
 import { AuthorApplicationHistory } from './author-application-history.class'
-import createModel from '../../models/author-application-history.model'
+import createModel from '../../../models/author-application-history.model'
 import hooks from './author-application-history.hooks'
 
 // Add this service to the service type index
-declare module '../../declarations' {
+declare module '../../../declarations' {
   interface ServiceTypes {
     'author-application-history': AuthorApplicationHistory & ServiceAddons<any>
   }

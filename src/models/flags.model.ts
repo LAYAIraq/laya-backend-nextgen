@@ -9,10 +9,11 @@ export default function (app: Application): typeof Model {
   const flags = sequelizeClient.define('flags', {
     referenceId: {
       type: DataTypes.UUID,
-      primaryKey: true
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4
     },
     question: {
-      type: DataTypes.JSON
+      type: DataTypes.STRING
     },
     answered: {
       type: DataTypes.BOOLEAN
@@ -28,24 +29,13 @@ export default function (app: Application): typeof Model {
     }
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (flags as any).associate = function (models: any): void {
-    flags.belongsTo(models.courses, {
-      foreignKey: {
-        name: 'courseId',
-        allowNull: false
-      }
+    flags.hasOne(models.flag_questions, {
+      foreignKey: 'id'
     })
-    flags.belongsTo(models.accounts, {
-      foreignKey: {
-        name: 'authorId',
-        allowNull: false
-      }
+    flags.hasMany(models.flag_answers, {
+      foreignKey: 'flagId'
     })
-    flags.belongsTo(models.enrollments, {
-      foreignKey: 'enrollmentId'
-    })
-    // See https://sequelize.org/master/manual/assocs.html
   }
 
   return flags

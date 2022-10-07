@@ -1,12 +1,12 @@
 // Initializes the `editorVoteHistory` service on path `/editor-vote-history`
 import { ServiceAddons } from '@feathersjs/feathers'
-import { Application } from '../../declarations'
+import { Application } from '../../../declarations'
 import { EditorVoteHistory } from './editor-vote-history.class'
-import createModel from '../../models/editor-vote-history.model'
+import createModel from '../../../models/editor-vote-history.model'
 import hooks from './editor-vote-history.hooks'
 
 // Add this service to the service type index
-declare module '../../declarations' {
+declare module '../../../declarations' {
   interface ServiceTypes {
     'editor-vote-history': EditorVoteHistory & ServiceAddons<any>
   }

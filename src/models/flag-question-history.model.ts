@@ -6,20 +6,10 @@ import { HookReturn } from 'sequelize/types/hooks'
 
 export default function (app: Application): typeof Model {
   const sequelizeClient: Sequelize = app.get('sequelizeClient')
-  const flagAnswers = sequelizeClient.define('flag_answers', {
-    edited: {
-      type: DataTypes.BOOLEAN
-    },
-    isQuestion: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
-    },
+  const flagQuestionHistory = sequelizeClient.define('flag_question_history', {
     text: {
       type: DataTypes.STRING,
       allowNull: false
-    },
-    score: {
-      type: DataTypes.INTEGER
     }
   }, {
     hooks: {
@@ -27,13 +17,7 @@ export default function (app: Application): typeof Model {
         options.raw = true
       }
     }
-  });
+  })
 
-  (flagAnswers as any).associate = function (models: any): void {
-    flagAnswers.hasMany(models.flag_answer_history, {
-      foreignKey: 'answerId'
-    })
-  }
-
-  return flagAnswers
+  return flagQuestionHistory
 }

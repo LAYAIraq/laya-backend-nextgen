@@ -17,7 +17,7 @@ export default {
     ],
     find: [],
     get: [
-      historyBundle()
+      historyBundle('voteId')
     ],
     create: [
       verifyRole('editor', 'editorId'),
@@ -26,7 +26,7 @@ export default {
     update: [],
     patch: [editorHistoryCreate()],
     remove: [
-      historyPurge('voteId', 'editor-vote-history')
+      historyPurge('voteId')
     ]
   },
 

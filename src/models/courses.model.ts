@@ -47,6 +47,10 @@ export default function (app: Application): typeof Model {
       }
     })
 
+    courses.hasMany(models.flags, {
+      foreignKey: 'courseId'
+    })
+
     // See https://sequelize.org/master/manual/assocs.html
   }
 

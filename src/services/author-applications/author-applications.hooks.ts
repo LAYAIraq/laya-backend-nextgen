@@ -33,7 +33,7 @@ export default {
   after: {
     all: [],
     find: [],
-    get: [historyBundle()],
+    get: [historyBundle('applicationId')],
     create: [],
     update: [],
     patch: [],
