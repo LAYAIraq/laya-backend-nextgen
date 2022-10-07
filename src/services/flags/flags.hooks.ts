@@ -1,6 +1,6 @@
 // import { HooksObject } from '@feathersjs/feathers';
 import * as authentication from '@feathersjs/authentication'
-import { associationUpdate } from '../../hooks'
+import { associationUpdate, associationPurge } from '../../hooks'
 import flagAnswersCollect from '../../hooks/flag-answers-collect'
 // Don't remove this comment. It's needed to format import lines nicely.
 
@@ -14,7 +14,7 @@ export default {
     create: [],
     update: [associationUpdate(['question', 'flag-questions'])],
     patch: [associationUpdate(['question', 'flag-questions'])],
-    remove: []
+    remove: [associationPurge(['flag-questions'], ['flag-answers', 'flagId'])]
   },
 
   after: {
