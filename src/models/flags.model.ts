@@ -7,23 +7,19 @@ import { HookReturn } from 'sequelize/types/hooks'
 export default function (app: Application): typeof Model {
   const sequelizeClient: Sequelize = app.get('sequelizeClient')
   const flags = sequelizeClient.define('flags', {
-    referenceId: {
-      type: DataTypes.UUID,
-      primaryKey: true,
-      allowNull: false,
-      validate: {
-        isUUID: 4
-      }
-    },
-    question: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
     answered: {
       type: DataTypes.BOOLEAN
     },
     anonymous: {
       type: DataTypes.BOOLEAN
+    },
+    referenceId: {
+      type: DataTypes.UUIDV4,
+      primaryKey: true
+    },
+    question: {
+      type: DataTypes.STRING,
+      allowNull: false
     }
   }, {
     hooks: {
@@ -34,10 +30,10 @@ export default function (app: Application): typeof Model {
   });
 
   (flags as any).associate = function (models: any): void {
-    flags.hasOne(models.flag_questions, {
-      foreignKey: 'id',
-      onDelete: 'CASCADE'
-    })
+    // flags.hasOne(models.flag_questions, {
+    //   foreignKey: 'id',
+    //   onDelete: 'CASCADE'
+    // })
     flags.hasMany(models.flag_answers, {
       foreignKey: 'flagId',
       onDelete: 'CASCADE'
