@@ -21,7 +21,8 @@ export default function (app: Application): typeof Model {
 
   (flagQuestions as any).associate = function (models: any): void {
     flagQuestions.hasMany(models.flag_question_history, {
-      foreignKey: 'questionId'
+      foreignKey: 'questionId',
+      onDelete: 'CASCADE'
     })
   }
 

@@ -10,10 +10,14 @@ export default function (app: Application): typeof Model {
     referenceId: {
       type: DataTypes.UUID,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4
+      allowNull: false,
+      validate: {
+        isUUID: 4
+      }
     },
     question: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false
     },
     answered: {
       type: DataTypes.BOOLEAN
@@ -31,10 +35,12 @@ export default function (app: Application): typeof Model {
 
   (flags as any).associate = function (models: any): void {
     flags.hasOne(models.flag_questions, {
-      foreignKey: 'id'
+      foreignKey: 'id',
+      onDelete: 'CASCADE'
     })
     flags.hasMany(models.flag_answers, {
-      foreignKey: 'flagId'
+      foreignKey: 'flagId',
+      onDelete: 'CASCADE'
     })
   }
 

@@ -39,9 +39,13 @@ export default function (app: Application): typeof Model {
       foreignKey: {
         name: 'courseId',
         allowNull: false
-      }
+      },
+      onDelete: 'CASCADE'
     })
-    // courseContent.hasMany()
+    courseContent.hasOne(models.flags, {
+      foreignKey: 'referenceId',
+      onDelete: 'CASCADE'
+    })
     // See https://sequelize.org/master/manual/assocs.html
   }
 
