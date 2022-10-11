@@ -15,6 +15,8 @@ export { default as authorApplicationHistoryCreate } from './author-application-
 export { default as courseContentInputSet } from './course-content-input-set'
 export { default as duplicatePrevent } from './duplicate-prevent'
 export { default as editorHistoryCreate } from './editor-history-create'
+export { default as flagAnswersCollect } from './flag-answers-collect'
+export { default as flagAnswersHandle } from './flag-answers-handle'
 export { default as historyBundle } from './history-bundle'
 export { default as historyCreate } from './history-create'
 export { default as historyPurge } from './history-purge'

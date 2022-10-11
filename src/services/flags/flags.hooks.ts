@@ -1,11 +1,10 @@
 // import { HooksObject } from '@feathersjs/feathers';
 import * as authentication from '@feathersjs/authentication'
 import {
-  // associationUpdate,
-  associationPurge
-  // associationCreate
+  associationPurge,
+  flagAnswersCollect,
+  flagAnswersHandle
 } from '../../hooks'
-import flagAnswersCollect from '../../hooks/flag-answers-collect'
 // import { softDelete, debug } from 'feathers-hooks-common'
 // Don't remove this comment. It's needed to format import lines nicely.
 
@@ -23,10 +22,10 @@ export default {
       // associationCreate('flag-questions', { name: 'flagId', customKey: 'referenceId' }, ['question', 'text'])
     ],
     update: [
-      // associationUpdate(['question', 'flag-questions'])
+      flagAnswersHandle()
     ],
     patch: [
-      // associationUpdate(['question', 'flag-questions'])
+      flagAnswersHandle()
     ],
     remove: [
       associationPurge(
