@@ -11,7 +11,7 @@ export default {
     get: [historyBundle('answerId', 'history')],
     create: [],
     update: [historyCreate('answerId', 'text')],
-    patch: [],
+    patch: [historyCreate('answerId', 'text')],
     remove: [historyPurge('answerId')]
   },
 
