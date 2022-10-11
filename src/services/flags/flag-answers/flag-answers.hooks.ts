@@ -1,10 +1,12 @@
-import { disallow } from 'feathers-hooks-common'
 import { historyBundle, historyCreate, historyPurge } from '../../../hooks'
+import { authenticate } from '@feathersjs/authentication'
 // Don't remove this comment. It's needed to format import lines nicely.
 
 export default {
   before: {
-    all: [disallow('external')],
+    all: [
+      authenticate('jwt')
+    ],
     find: [],
     get: [historyBundle('answerId', 'history')],
     create: [],

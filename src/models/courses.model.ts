@@ -47,7 +47,7 @@ export default function (app: Application): typeof Model {
       }
     })
 
-    courses.hasMany(models.flags, {
+    courses.hasMany(models.course_content, {
       foreignKey: 'courseId'
     })
 
