@@ -45,13 +45,24 @@ describe('\'flags\' service', () => {
     expect(app.service('course-contents').get(courseContentId)).toBeTruthy()
   })
   afterAll(async () => {
-    await app.service('accounts').remove(authorId)
     await app.service('courses').remove(courseId)
     await app.service('course-contents').remove(courseContentId)
-    await app.service('accounts').find({ query: { email: '@test.de' } })
+    await app.service('accounts').find()
       .then((res: any) => {
         res.data.forEach(async (user: any) => {
           await app.service('accounts').remove(user.id)
+        })
+      })
+    await app.service('flags').find()
+      .then((res: any) => {
+        res.data.forEach(async (flag: any) => {
+          await app.service('flags').remove(flag.referenceId)
+        })
+      })
+    await app.service('flag-answers').find()
+      .then((res: any) => {
+        res.data.forEach(async (flagAnswer: any) => {
+          await app.service('flag-answers').remove(flagAnswer.id)
         })
       })
   })
@@ -111,5 +122,15 @@ describe('\'flags\' service', () => {
     }
     const flag = await app.service('flags').get(courseContentId)
     expect(flag.answers).toHaveLength(5)
+  })
+
+  it('creates flagAnswer for a flag on patch', async () => {
+    await app.service('flags').create({ authorId, referenceId: courseContentId, question: 'testtest' })
+      .then(async (res: any) => {
+        await app.service('flags').patch(res.referenceId, { ...res, answers: [{ text: 'testAnswer', authorId }] })
+          .then(async () => {
+            await expect(app.service('flag-answers').find()).resolves.toHaveProperty('total', 1)
+          })
+      })
   })
 })
