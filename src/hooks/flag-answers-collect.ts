@@ -9,7 +9,7 @@ import { NotFound } from '@feathersjs/errors'
 export default (): Hook => {
   return async (context: HookContext): Promise<HookContext> => {
     const { app, id } = context
-    await app.service('flags').get(id)
+    await app.service('flags')._get(id)
       .catch((err: Error) => {
         throw new NotFound(err.message)
       })

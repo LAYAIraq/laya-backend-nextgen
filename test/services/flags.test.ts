@@ -1,4 +1,6 @@
 import app from '../../src/app'
+import request from 'supertest'
+import { createTestUser } from '../helpers'
 
 describe('\'flags\' service', () => {
   let authorId: string
@@ -46,10 +48,25 @@ describe('\'flags\' service', () => {
     await app.service('accounts').remove(authorId)
     await app.service('courses').remove(courseId)
     await app.service('course-contents').remove(courseContentId)
+    await app.service('accounts').find({ query: { email: '@test.de' } })
+      .then((res: any) => {
+        res.data.forEach(async (user: any) => {
+          await app.service('accounts').remove(user.id)
+        })
+      })
   })
 
   it('registered the service', () => {
     expect(app.service('flags')).toBeTruthy()
+  })
+
+  it('fails for unauthenticated users', async () => {
+    await request(app).post('/flags').send({
+      referenceId: courseContentId,
+      question: 'testQuestion',
+      authorId
+    })
+      .expect(401)
   })
 
   it('fails to create flag without referenceId', async () => {
@@ -64,8 +81,32 @@ describe('\'flags\' service', () => {
     await expect(app.service('flags').create({ referenceId: courseContentId, question: 'testtest' })).rejects.toThrow()
   })
 
-  it('creates flag', async () => {
-    await expect(app.service('flags').create({ authorId, referenceId: courseContentId, question: 'testtest' }))
-      .resolves.toHaveProperty('referenceId', courseContentId)
+  it('creates flag with all neccessary input', async () => {
+    await expect(app.service('flags').create(
+      { authorId, referenceId: courseContentId, question: 'testtest' }
+    )).resolves.toStrictEqual(expect.objectContaining({ // authorId omitted because it is not returned
+      referenceId: courseContentId,
+      question: 'testtest'
+    }))
+  })
+
+  it('gets all flagAnswers for a flag', async () => {
+    await app.service('flags').create(
+      { authorId, referenceId: courseContentId, question: 'testtest' }
+    )
+    for (let i = 0; i < 5; i++) {
+      const user = await createTestUser()
+      await app.service('flag-answers').create({
+        flagId: courseContentId,
+        text: 'testAnswer',
+        authorId: user.id
+      })
+        .then((res: any) => {
+          expect(res).toBeTruthy()
+          console.log(res)
+        })
+    }
+    const flag = await app.service('flags').get(courseContentId)
+    expect(flag.answers).toHaveLength(5)
   })
 })

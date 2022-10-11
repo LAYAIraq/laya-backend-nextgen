@@ -11,18 +11,18 @@ import app from '../../src/app'
  * @param data The data to create the user with
  * @returns Promise resolving to the user
  */
-export default (data?: {
-  email: string,
-  password: string,
-  username: string,
+export default async (data?: {
+  email: string
+  password: string
+  username: string
   role?: string
 }): Promise<any> => {
   const testUser = {
-    username: 'test' + Math.floor(Math.random() * 10000),
-    email: 'test' + Math.floor(Math.random() * 10000) + '@test',
+    username: `test-${Math.floor(Math.random() * 10000)}`,
+    email: `test-${Math.floor(Math.random() * 10000)}@test.de`,
     password: 'test'
   }
-  return app.service('accounts').create(data
+  return await app.service('accounts').create((data != null)
     ? data
     : testUser
   )
