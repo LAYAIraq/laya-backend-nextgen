@@ -1,7 +1,7 @@
 import app from '../../src/app'
-import {NotFound, Forbidden} from '@feathersjs/errors'
-// @ts-ignore
-import {createTestUser} from '../helpers'
+import { NotFound, Forbidden } from '@feathersjs/errors'
+// @ts-expect-error
+import { createTestUser } from '../helpers'
 
 describe('\'author-applications\' service', () => {
   let userId: number
@@ -9,22 +9,23 @@ describe('\'author-applications\' service', () => {
   beforeAll(async () => {
     await createTestUser({
       username: 'testApplication',
-      email: 'test@application',
+      email: 'test@application.de',
       password: 'test',
-      role: 'student'})
-    .then((resp: any) => {
-      userId = resp.id
+      role: 'student'
     })
+      .then((resp: any) => {
+        userId = resp.id
+      })
   })
 
   afterAll(async () => {
     await app.service('accounts').remove(userId)
     await app.service('author-applications').find({
-      query: { fullName: 'test full name'}
+      query: { fullName: 'test full name' }
     })
       .then(async (resp: any) => {
-        resp.data.forEach((application: any) => {
-          app.service('author-applications').remove(application.id)
+        resp.data.forEach(async (application: any) => {
+          await app.service('author-applications').remove(application.id)
         })
       })
   })
@@ -101,17 +102,17 @@ describe('\'author-applications\' service', () => {
 
   it('successfully creates an application with all required input',
     async () => {
-    await expect(app.service('author-applications').create({
-      applicationText: 'test application',
-      areaOfExpertise: 'test area of expertise',
-      fullName: 'test full name',
-      institution: 'test institution',
-      applicantId: userId
-    })).resolves.toBeTruthy()
-  })
+      await expect(app.service('author-applications').create({
+        applicationText: 'test application',
+        areaOfExpertise: 'test area of expertise',
+        fullName: 'test full name',
+        institution: 'test institution',
+        applicantId: userId
+      })).resolves.toBeTruthy()
+    })
 
   it('fails for applicantId that is not a student', async () => {
-    await app.service('accounts').patch(userId, {role: 'editor'})
+    await app.service('accounts').patch(userId, { role: 'editor' })
     await expect(app.service('author-applications').create({
       applicationText: 'test application',
       areaOfExpertise: 'test area of expertise',
@@ -144,11 +145,11 @@ describe('\'author-applications\' service', () => {
         })).resolves
           .toHaveProperty('areaOfExpertise', 'test area of expertise 2')
         const history: any = await app.service('author-application-history')
-          .find({query: {applicationText: 'test application'}})
+          .find({ query: { applicationText: 'test application' } })
         expect(history.total).toBeGreaterThanOrEqual(1)
         await expect(app.service('author-applications').get(applicationId))
           .resolves.toHaveProperty('edited', 1)
-       })
+      })
   })
 
   // skipped because foreign keys are not saved in test database
@@ -163,20 +164,18 @@ describe('\'author-applications\' service', () => {
     })
       .then(async (resp: any) => {
         await app.service('author-applications')
-          .patch(resp.id, {applicationText: 'test application 2'})
+          .patch(resp.id, { applicationText: 'test application 2' })
         await app.service('author-applications')
-          .patch(resp.id, {areaOfExpertise: 'asd'})
+          .patch(resp.id, { areaOfExpertise: 'asd' })
         await app.service('author-applications')
-          .patch(resp.id, {fullName: 'asd'})
+          .patch(resp.id, { fullName: 'asd' })
         await app.service('author-applications')
-          .patch(resp.id, {institution: 'asd'})
+          .patch(resp.id, { institution: 'asd' })
         await expect(app.service('author-applications')
           .remove(resp.id)).resolves.toBeTruthy()
         await expect(app.service('author-application-history')
-          .find({query: {applicationId: resp.id}}))
+          .find({ query: { applicationId: resp.id } }))
           .resolves.toHaveProperty('total', 0)
       })
-
   })
-
 })

@@ -1,7 +1,7 @@
 import app from '../../src/app'
-// @ts-ignore
-import {createTestUser} from '../helpers'
-import {NotFound} from '@feathersjs/errors'
+// @ts-expect-error
+import { createTestUser } from '../helpers'
+import { NotFound } from '@feathersjs/errors'
 // import request from 'supertest'
 
 describe('\'editor-votes\' service', () => {
@@ -13,20 +13,22 @@ describe('\'editor-votes\' service', () => {
   beforeAll(async () => {
     await createTestUser({
       username: 'editor',
-      email: 'editor@editor',
+      email: 'editor@editor.de',
       password: 'editor',
-      role: 'editor'})
-    .then((resp: any) => {
-      editorId = resp.id
+      role: 'editor'
     })
+      .then((resp: any) => {
+        editorId = resp.id
+      })
     await createTestUser({
       username: 'student',
-      email: 'student@student',
+      email: 'student@student.de',
       password: 'student',
-      role: 'student'})
-    .then((resp: any) => {
-      studentId = resp.id
+      role: 'student'
     })
+      .then((resp: any) => {
+        studentId = resp.id
+      })
   })
 
   afterAll(async () => {
@@ -42,31 +44,30 @@ describe('\'editor-votes\' service', () => {
       institution: 'test institution',
       applicantId: studentId
     })
-    .then((resp: any) => {
+      .then((resp: any) => {
       // console.log(resp)
-      applicationId = resp.id
-    })
-    .catch((err: any) => {
-      console.log(err.message)
-    })
+        applicationId = resp.id
+      })
+      .catch((err: any) => {
+        console.log(err.message)
+      })
   })
 
   afterEach(async () => {
-    if (voteId) {
+    if (voteId !== undefined) {
       await app.service('editor-votes').remove(voteId)
         .catch(() => 'no vote to remove')
     }
     await app.service('author-applications').remove(applicationId)
-    .catch((err: any) => {
-      console.warn(err.message)
-      console.log(err)
-    })
-    await app.service('accounts').find({query: { username: 'non-editor'} })
+      .catch((err: any) => {
+        console.warn(err.message)
+        console.log(err)
+      })
+    await app.service('accounts').find({ query: { username: 'non-editor' } })
       .then(async (resp: any) => {
         await app.service('accounts').remove(resp.data[0].id)
       })
       .catch(() => 'no non-editor account')
-
   })
 
   it('registered the service', () => {
@@ -83,10 +84,10 @@ describe('\'editor-votes\' service', () => {
         console.log(err.message)
         console.log(err)
         throw err
-    })
+      })
     voteId = vote.id
     expect(vote).toHaveProperty('vote', true)
-    const votes: any = await app.service('editor-votes').find({query: {id: voteId}})
+    const votes: any = await app.service('editor-votes').find({ query: { id: voteId } })
     expect(votes.data).toHaveLength(1)
   })
 
@@ -97,13 +98,13 @@ describe('\'editor-votes\' service', () => {
       applicationId
     })
       .then(async (resp: any) => {
-        await app.service('editor-votes').patch(resp.id, {vote: false})
+        await app.service('editor-votes').patch(resp.id, { vote: false })
           .catch((err: any) => {
             console.log(err.message)
             console.log(err)
             throw err
           })
-          .then(async() => {
+          .then(async () => {
             const history: any = await app.service('editor-vote-history').find()
             expect(history.total).toBeGreaterThanOrEqual(1)
           })
@@ -116,16 +117,15 @@ describe('\'editor-votes\' service', () => {
   })
 
   it('adding vote for non-editor fails', async () => {
-
     await expect(app.service('editor-votes').create({
       vote: true,
       editorId: studentId,
       applicationId
     })).rejects.toThrow('You do not have permission to perform this action')
 
-        // .finally(async () => {
-        //   await app.service('accounts').remove(resp.id)
-        // })
+    // .finally(async () => {
+    //   await app.service('accounts').remove(resp.id)
+    // })
   })
 
   // skipped because foreign keys are not saved in test db

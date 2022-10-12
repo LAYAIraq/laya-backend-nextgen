@@ -1,34 +1,33 @@
 import app from '../../src/app'
-// @ts-ignore
+// @ts-expect-error
 import request from 'supertest'
-// @ts-ignore
+// @ts-expect-error
 import createUser from '../helpers/create-test-user'
 
 describe('resetPassword middleware', () => {
-  let password: string
   let id: number
 
-  beforeAll( async () => {
+  beforeAll(async () => {
     await createUser()
       .then((account: any) => {
         id = account.id
-        password = account.password
       })
   })
 
-  afterAll( async () => {
+  afterAll(async () => {
     await app.service('accounts').remove(id)
   })
 
   it('changes the password, locks account', async () => {
     await app.service('accounts').get(id)
       .then(async (account: any) => {
-        const pwd = account.password
+        const { id, password } = account
         await request(app)
-          .post('/accounts/pwd-reset/' + account.id)
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          .post(`/accounts/pwd-reset/${id}`)
           .expect(200)
-        const usr = await app.service('accounts').get(account.id)
-        expect(usr).toHaveProperty('password', expect.not.stringMatching(pwd))
+        const usr = await app.service('accounts').get(id)
+        expect(usr).toHaveProperty('password', expect.not.stringMatching(password))
         expect(usr).toHaveProperty('locked', expect.any(String))
       })
       .catch(() => {
@@ -37,8 +36,9 @@ describe('resetPassword middleware', () => {
   })
 
   it('fails when account is locked', async () => {
-    await app.service('accounts').patch(id, {locked: Date.now()})
+    await app.service('accounts').patch(id, { locked: Date.now() })
     await request(app)
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       .post('/accounts/pwd-reset/' + id)
       .expect(403)
   })

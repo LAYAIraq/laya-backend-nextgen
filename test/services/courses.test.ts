@@ -1,8 +1,8 @@
 import app from '../../src/app'
-// @ts-ignore
-import {getAuthenticationToken, createTestUser} from '../helpers'
-import {NotFound, Forbidden, BadRequest} from '@feathersjs/errors'
-// @ts-ignore
+// @ts-expect-error
+import { getAuthenticationToken, createTestUser } from '../helpers'
+import { NotFound, Forbidden, BadRequest } from '@feathersjs/errors'
+// @ts-expect-error
 import request from 'supertest'
 
 describe('\'courses\' service', () => {
@@ -12,7 +12,7 @@ describe('\'courses\' service', () => {
   beforeAll(async () => {
     await app.service('accounts').create({
       username: 'author',
-      email: 'author@author',
+      email: 'author@author.de',
       password: 'author',
       role: 'author'
     })
@@ -22,7 +22,7 @@ describe('\'courses\' service', () => {
       })
       .then(async (resp: any) => {
         authorId = resp.id
-        authorToken = await getAuthenticationToken('author@author', 'author')
+        authorToken = await getAuthenticationToken('author@author.de', 'author')
           .catch((err: any) => {
             console.log(err)
             throw err
@@ -32,12 +32,12 @@ describe('\'courses\' service', () => {
 
   afterAll(async () => {
     await app.service('accounts').remove(authorId)
-    await app.service('accounts').find({query: { username: 'user'}})
+    await app.service('accounts').find({ query: { username: 'user' } })
       .then(async (resp: any) => await app.service('accounts').remove(resp.data[0].id))
-    await app.service('courses').find({query: { category: 'TEST'}})
+    await app.service('courses').find({ query: { category: 'TEST' } })
       .then(async (resp: any) => {
-        resp.data.forEach((course: any) => {
-          app.service('courses').remove(course.courseId)
+        resp.data.forEach(async (course: any) => {
+          await app.service('courses').remove(course.courseId)
         })
       })
   })
@@ -71,7 +71,7 @@ describe('\'courses\' service', () => {
   it('rejects to create a course for non-author', async () => {
     await createTestUser({
       username: 'user',
-      email: 'user@user',
+      email: 'user@user.de',
       password: 'user',
       role: 'student'
     })
@@ -117,7 +117,7 @@ describe('\'courses\' service', () => {
       authorId
     }
     await app.service('courses').create(course)
-      .then(async (resp: any) => {
+      .then(async (resp: { courseId: string }) => {
         const course = {
           name: 'Test Course 2',
           category: 'TEST',
@@ -135,7 +135,7 @@ describe('\'courses\' service', () => {
       password: 'user',
       role: 'author'
     })
-      .then(async (resp: any) => {
+      .then(async (resp: { courseId: string }) => {
         const course = {
           name: 'Test Course 2',
           category: 'TEST',
@@ -153,7 +153,7 @@ describe('\'courses\' service', () => {
       authorId
     }
     await app.service('courses').create(course)
-      .then(async (resp: any) => {
+      .then(async (resp: { courseId: string }) => {
         const course = {
           name: 'Test Course 2',
           category: 'TEST',

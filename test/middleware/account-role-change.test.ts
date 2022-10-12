@@ -1,29 +1,29 @@
 import app from '../../src/app'
-// @ts-ignore
+// @ts-expect-error
 import request from 'supertest'
-// @ts-ignore
-import { getAuthenticationToken, sendAuthenticatedRequest } from '../helpers'
+// @ts-expect-error
+import { getAuthenticationToken, sendAuthenticatedRequest, createTestUser } from '../helpers'
 
 describe('accountChangeRole middleware', () => {
   let userId: number
+  let userEmail: string
   let adminId: number
+  let token: string
   beforeAll(async () => {
-    await app.service('accounts').create({
-      email: 'test@user',
-      password: '123456',
-      username: 'testUser'
-    })
+    await createTestUser()
       .then((resp: any) => {
         userId = resp.id
+        userEmail = resp.email
       })
     await app.service('accounts').create({
-      email: 'admin@user',
+      email: 'admin@role-change.de',
       password: '123456',
       username: 'adminUser',
       role: 'admin'
     })
-      .then((resp: any) => {
+      .then(async (resp: any) => {
         adminId = resp.id
+        token = await getAuthenticationToken('admin@role-change.de', '123456')
       })
   })
 
@@ -35,7 +35,7 @@ describe('accountChangeRole middleware', () => {
   it('should fail for non-authenticated user', async () => {
     await request(app)
       .post(`/accounts/${userId}/change-role`)
-      .send({ role: 'author'})
+      .send({ role: 'author' })
       .expect(401)
   })
 
@@ -45,9 +45,9 @@ describe('accountChangeRole middleware', () => {
   })
 
   it('should fail for non-admin user', async () => {
-    const token = await getAuthenticationToken('test@user', '123456')
+    const token = await getAuthenticationToken(userEmail, 'test')
     const resp = await sendAuthenticatedRequest(app,
-        'post',
+      'post',
         `/accounts/${userId}/change-role`,
         token,
         { role: 'author' }
@@ -56,11 +56,10 @@ describe('accountChangeRole middleware', () => {
   })
 
   it('should fail for non-existent user', async () => {
-    const token = await getAuthenticationToken('admin@user', '123456')
     const resp = await sendAuthenticatedRequest(
       app,
       'post',
-      `/accounts/999999/change-role`,
+      '/accounts/999999/change-role',
       token,
       { role: 'author' }
     )
@@ -69,7 +68,6 @@ describe('accountChangeRole middleware', () => {
   })
 
   it('should fail for non-existent role', async () => {
-    const token = await getAuthenticationToken('admin@user', '123456')
     const resp = await sendAuthenticatedRequest(
       app,
       'post',
@@ -82,10 +80,9 @@ describe('accountChangeRole middleware', () => {
   })
 
   it('should fail for incomplete request', async () => {
-    const token = await getAuthenticationToken('admin@user', '123456')
     const resp = await sendAuthenticatedRequest(
-        app,
-        'post',
+      app,
+      'post',
         `/accounts/${userId}/change-role`,
         token
     )
@@ -93,7 +90,6 @@ describe('accountChangeRole middleware', () => {
   })
 
   it('should succeed for admin user and existent role', async () => {
-    const token = await getAuthenticationToken('admin@user', '123456')
     const resp = await sendAuthenticatedRequest(
       app,
       'post',
@@ -107,7 +103,6 @@ describe('accountChangeRole middleware', () => {
   })
 
   it('changing admin role should fail', async () => {
-    const token = await getAuthenticationToken('admin@user', '123456')
     const resp = await sendAuthenticatedRequest(
       app,
       'post',
@@ -118,5 +113,4 @@ describe('accountChangeRole middleware', () => {
     expect(resp.status).toBe(403)
     expect(resp.body.message).toBe('Cannot change role of admin')
   })
-
 })

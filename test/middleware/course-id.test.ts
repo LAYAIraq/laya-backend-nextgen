@@ -1,21 +1,23 @@
 import app from '../../src/app'
-//@ts-ignore
+// @ts-expect-error
 import request from 'supertest'
-//@ts-ignore
+// @ts-expect-error
 import { createTestUser, getAuthenticationToken, sendAuthenticatedRequest } from '../helpers'
 
 describe('\'course-id\' middleware', () => {
   let courseId: string
   let userId: number
+  let token: string
   beforeAll(async () => {
     await createTestUser({
-      email: 'test@courseId',
+      email: 'test@course-id.de',
       password: 'test',
       username: 'testCourseId',
       role: 'author'
     })
-      .then((user) => {
+      .then(async (user) => {
         userId = user.id
+        token = await getAuthenticationToken('test@course-id.de', 'test')
       })
     await app.service('courses').create({
       name: 'Test Course',
@@ -46,20 +48,17 @@ describe('\'course-id\' middleware', () => {
   })
 
   it('should fail for requests without a course name', async () => {
-    const token = await getAuthenticationToken('test@user', 'test')
     const resp = await sendAuthenticatedRequest(app, 'get', '/courses/id', token)
     expect(resp.status).toBe(400)
   })
 
   it('should return 404 for non-existent courses', async () => {
-    const token = await getAuthenticationToken('test@courseId', 'test')
-    const resp = await sendAuthenticatedRequest(app, 'get', '/courses/id', token, {courseName: 'non-existent-course'})
+    const resp = await sendAuthenticatedRequest(app, 'get', '/courses/id', token, { courseName: 'non-existent-course' })
     expect(resp.status).toBe(404)
   })
 
   it('should return the correct course id', async () => {
-    const token = await getAuthenticationToken('test@courseId', 'test')
-    const resp = await sendAuthenticatedRequest(app, 'get', '/courses/id', token, {courseName: 'Test Course'})
+    const resp = await sendAuthenticatedRequest(app, 'get', '/courses/id', token, { courseName: 'Test Course' })
     expect(resp.status).toBe(200)
     expect(resp.body).toStrictEqual({ courseId })
   })

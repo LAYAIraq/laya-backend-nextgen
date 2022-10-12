@@ -1,19 +1,15 @@
 import app from '../../src/app'
-// @ts-ignore
+// @ts-expect-error
 import request from 'supertest'
-// @ts-ignore
+// @ts-expect-error
 import { createTestUser, getAuthenticationToken, sendAuthenticatedRequest } from '../helpers'
 
-describe('userLanguageChange middleware', () => {
+describe('accountLanguageChange middleware', () => {
   let uid: number
   let token: string
 
   beforeAll(async () => {
-    await createTestUser({
-      email: 'test' + Math.random() + '@test.com',
-      password: 'test',
-      username: 'testUser' + Math.random()
-    })
+    await createTestUser()
       .then(async (resp: any) => {
         uid = resp.id
         token = await getAuthenticationToken(resp.email, 'test')
@@ -44,7 +40,6 @@ describe('userLanguageChange middleware', () => {
   })
 
   describe('authenticated', () => {
-
     it('should change language', async () => {
       await expect(app.service('accounts').get(uid)).resolves.toHaveProperty('lang', 'en')
       await sendAuthenticatedRequest(app, 'post', `/accounts/${uid}/change-language`, token, { lang: 'de' })
@@ -62,14 +57,14 @@ describe('userLanguageChange middleware', () => {
     })
 
     it('should fail for missing language', async () => {
-      await sendAuthenticatedRequest(app,  'post', `/accounts/${uid}/change-language`, token, {})
+      await sendAuthenticatedRequest(app, 'post', `/accounts/${uid}/change-language`, token, {})
         .then((resp: any) => {
           expect(resp.status).toBe(400)
         })
     })
 
     it('should fail for invalid body', async () => {
-      // @ts-ignore - invalid body
+      // @ts-expect-error - invalid body
       await sendAuthenticatedRequest(app, 'post', `/accounts/${uid}/change-language`, token, 'invalid')
         .then((resp: any) => {
           expect(resp.status).toBe(500)
@@ -83,5 +78,4 @@ describe('userLanguageChange middleware', () => {
         })
     })
   })
-
 })

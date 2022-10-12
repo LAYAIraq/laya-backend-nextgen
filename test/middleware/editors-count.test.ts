@@ -1,9 +1,9 @@
 import app from '../../src/app'
-// @ts-ignore
+// @ts-expect-error
 import request from 'supertest'
-// @ts-ignore
+// @ts-expect-error
 import getAuthenticationToken from '../helpers/get-authentication-token'
-// @ts-ignore
+// @ts-expect-error
 import sendAuthenticatedRequest from '../helpers/send-authenticated-request'
 
 const accounts = app.service('accounts')
@@ -14,7 +14,7 @@ describe('editors middleware', () => {
   beforeAll(async () => {
     await accounts.create({
       username: 'myEditor',
-      email: 'the@editor',
+      email: 'the@editor.de',
       password: 'veryverysecret',
       role: 'editor'
     })
@@ -24,7 +24,7 @@ describe('editors middleware', () => {
 
     await accounts.create({
       username: 'myNonEditor',
-      email: 'the@normaluser',
+      email: 'the@normaluser.de',
       password: 'veryverysecret'
     })
       .then((resp: any) => {
@@ -44,7 +44,7 @@ describe('editors middleware', () => {
   })
 
   it('fails with wrong http method', async () => {
-    const token = await getAuthenticationToken('the@editor', 'veryverysecret')
+    const token = await getAuthenticationToken('the@editor.de', 'veryverysecret')
     await sendAuthenticatedRequest(app, 'post', '/accounts/editors', token)
       .then((resp: any) => {
         expect(resp.status).toBe(405)
@@ -56,9 +56,9 @@ describe('editors middleware', () => {
       .post('/authentication')
       .set('Accept', 'application/json')
       .set('Content-Type', 'application/json')
-      .send({ strategy: 'local', email: 'the@normaluser', password: 'veryverysecret' })
+      .send({ strategy: 'local', email: 'the@normaluser.de', password: 'veryverysecret' })
 
-    const token = resp.body.accessToken
+    const token: string = resp.body.accessToken
     await request(app)
       .get('/accounts/editors')
       .set('Accept', 'application/json')
@@ -68,7 +68,7 @@ describe('editors middleware', () => {
   })
 
   it('succeeds for editor request', async () => {
-    const token = await getAuthenticationToken('the@editor', 'veryverysecret')
+    const token = await getAuthenticationToken('the@editor.de', 'veryverysecret')
     const resp = await sendAuthenticatedRequest(app, 'get', '/accounts/editors', token)
     expect(resp.status).toBe(200)
     expect(resp.body.editors).toBeGreaterThanOrEqual(1)

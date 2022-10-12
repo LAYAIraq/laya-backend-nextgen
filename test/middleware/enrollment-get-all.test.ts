@@ -1,7 +1,7 @@
 import app from '../../src/app'
-//@ts-ignore
+// @ts-expect-error
 import request from 'supertest'
-//@ts-ignore
+// @ts-expect-error
 import { createTestUser, getAuthenticationToken, sendAuthenticatedRequest } from '../helpers'
 
 describe('enrollmentGetAll middleware', () => {
@@ -11,14 +11,14 @@ describe('enrollmentGetAll middleware', () => {
 
   beforeAll(async () => {
     await createTestUser({
-      email: 'testAuthorMail',
+      email: 'test@AuthorMail.de',
       username: 'testAuthorEnrollment',
       password: 'test',
       role: 'author'
     })
       .then(async (res) => {
         userId = res.id
-        token = await getAuthenticationToken('testAuthorMail', 'test')
+        token = await getAuthenticationToken('test@AuthorMail.de', 'test')
       })
     await app.service('courses').create({
       name: 'testCourse',
@@ -87,8 +87,8 @@ describe('enrollmentGetAll middleware', () => {
   it.skip('returns all enrollments for courseId', async () => {
     for (let i = 0; i < 5; i++) {
       await createTestUser({
-        email: 'testStudentMail' + i,
-        username: 'testStudent-' + i,
+        email: `testStudentMail-${i}@mail.de`,
+        username: `testStudent-${i}`,
         password: 'test'
       })
         .then(async (res) => {
@@ -113,7 +113,7 @@ describe('enrollmentGetAll middleware', () => {
   it.skip('returns all enrollments for studentId', async () => {
     for (let i = 0; i < 5; i++) {
       await app.service('courses').create({
-        name: 'testCourse' + i,
+        name: `testCourse-${i}`,
         category: 'test',
         authorId: userId
       })

@@ -1,20 +1,17 @@
 import app from '../../src/app'
-// @ts-ignore
+// @ts-expect-error
 import request from 'supertest'
-// @ts-ignore
-import { getAuthenticationToken, sendAuthenticatedRequest } from '../helpers'
+// @ts-expect-error
+import { getAuthenticationToken, sendAuthenticatedRequest, createTestUser } from '../helpers'
 
 describe('userRole middleware', () => {
   let userId: number
 
   beforeAll(async () => {
-    await app.service('accounts').create({
-      email: 'test@user',
-      password: '123456',
-      username: 'testUser'
-    }).then((resp: any) => {
-      userId = resp.id
-    })
+    await createTestUser()
+      .then((resp: any) => {
+        userId = resp.id
+      })
   })
 
   afterAll(async () => {
@@ -22,7 +19,6 @@ describe('userRole middleware', () => {
   })
 
   describe('non-authenticated', () => {
-
     it('should fail for non-authenticated user', async () => {
       await request(app)
         .get(`/accounts/${userId}/role`)
@@ -46,14 +42,10 @@ describe('userRole middleware', () => {
     let token: string
     let authId: number
     beforeAll(async () => {
-      await app.service('accounts').create({
-        email: 'my@authenticated',
-        password: '123456',
-        username: 'myAuthenticated'
-      })
+      await createTestUser()
         .then(async (resp: any) => {
           authId = resp.id
-          token = await getAuthenticationToken('my@authenticated', '123456')
+          token = await getAuthenticationToken(resp.email, 'test')
         })
     })
     afterAll(async () => {
@@ -115,5 +107,4 @@ describe('userRole middleware', () => {
         })
     })
   })
-
 })

@@ -1,9 +1,8 @@
 import app from '../../src/app'
-// @ts-ignore
+// @ts-expect-error
 import request from 'supertest'
 
 describe('nameTaken middleware', () => {
-
   afterAll(async () => {
     await app.service('accounts').find({ query: { username: 'name-test' } })
       .then(async (resp: any) => {
@@ -27,7 +26,7 @@ describe('nameTaken middleware', () => {
   it('returns true when name present', async () => {
     await app.service('accounts').create({
       username: 'name-test',
-      email: 'test@test',
+      email: 'test@test.de',
       password: 'test'
     })
     await request(app).get('/accounts/name/name-test')

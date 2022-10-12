@@ -1,5 +1,6 @@
 import app from '../../src/app'
 import request from 'supertest'
+// @ts-expect-error
 import { createTestUser } from '../helpers'
 
 describe('\'flag-answers\' service', () => {

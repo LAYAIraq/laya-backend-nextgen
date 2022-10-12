@@ -1,14 +1,14 @@
 import app from '../../src/app'
 // import {LocalStrategy} from '@feathersjs/authentication-local'
 // import {NullableId} from '@feathersjs/feathers'
-// @ts-ignore
+// @ts-expect-error
 import createUser from '../helpers/create-test-user'
 const accounts = app.service('accounts')
 
 describe('\'accounts\' service', () => {
   afterAll(async () => {
     await accounts.find()
-      .then(async (resp: any ) => {
+      .then(async (resp: any) => {
         for (const user of resp.data) {
           await accounts.remove(user.id)
             .catch(() => 'user not found')
@@ -26,7 +26,7 @@ describe('\'accounts\' service', () => {
       const testUser = accounts.create({
         username: 'something',
         password: 'supersecret',
-        email: 'veryunique',
+        email: 'veryunique@d.de',
         role: 'someRole'
       })
       await expect(testUser).rejects.toThrow('role does not exist!')
@@ -54,29 +54,32 @@ describe('\'accounts\' service', () => {
     })
 
     it('also created an entry in appearance prefs', async () => {
-      const resp: any = await app.service('user-appearance-prefs').find({query:{
-        id: userId
-      }})
+      const resp: any = await app.service('user-appearance-prefs').find({
+        query: {
+          id: userId
+        }
+      })
       expect(resp.data.length).toBe(1)
       expect(resp.data[0].id).toEqual(userId)
     })
 
     it('also created an entry in media prefs', async () => {
       const resp: any = await app.service('user-media-prefs').find({
-        query: {id: userId}
+        query: { id: userId }
       })
       expect(resp.data.length).toBeTruthy()
       expect(resp.data[0].id).toEqual(userId)
     })
 
     it('removes prefs when removing user', async () => {
-      const findIf = (service: string, id: number) => {
-        // @ts-ignore
+      const findIf = async (service: string, id: number): Promise<any> => {
+        // @ts-expect-error
         return app.service(service).find({
           query: {
             id: id,
             $limit: 0
-          }})
+          }
+        })
       }
 
       let resp: any = await findIf('user-appearance-prefs', userId)
@@ -95,7 +98,7 @@ describe('\'accounts\' service', () => {
 
     it('removes locked entry when it is older than 24 hrs', async () => {
       const newDate = Date.now() - 1000 * 60 * 60 * 24 * 2
-      await accounts.patch(userId, {locked: newDate})
+      await accounts.patch(userId, { locked: newDate })
         .then(async () => {
           await expect(accounts.get(userId)).resolves.toHaveProperty('locked', null)
         })
@@ -103,7 +106,7 @@ describe('\'accounts\' service', () => {
 
     it('does not remove locked entry when it is not older than 24 hrs', async () => {
       const newDate = Date.now() - 1000 * 60 * 60 * 12
-      await accounts.patch(userId, {locked: newDate})
+      await accounts.patch(userId, { locked: newDate })
         .then(async () => {
           await expect(accounts.get(userId)).resolves.toHaveProperty('locked', expect.any(String))
         })
@@ -114,7 +117,6 @@ describe('\'accounts\' service', () => {
       for (let i = 0; i < 10; i++) {
         await createUser()
           .then(async (resp: any) => {
-            console.log(resp.verificationToken)
             if (verificationCode !== undefined) {
               expect(resp.verificationToken).not.toEqual(verificationCode)
             }
@@ -122,6 +124,5 @@ describe('\'accounts\' service', () => {
           })
       }
     })
-
   })
 })
