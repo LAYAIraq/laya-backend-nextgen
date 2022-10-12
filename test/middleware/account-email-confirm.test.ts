@@ -1,5 +1,5 @@
 import app from '../../src/app'
-// @ts-ignore
+// @ts-expect-error
 import request from 'supertest'
 
 describe('Confirm Email middleware', () => {
@@ -9,7 +9,7 @@ describe('Confirm Email middleware', () => {
   beforeAll(async () => {
     await app.service('accounts').create({
       username: 'confirm-test',
-      email: 'confirm-test',
+      email: 'user@confirm-test.de',
       password: 'test'
     }).then((resp: any) => {
       uid = resp.id
@@ -31,7 +31,7 @@ describe('Confirm Email middleware', () => {
       .send({ uid, token })
     expect(response.status).toBe(200)
     expect(response.text).toBe('Email verified')
-    const testUser: any  = await app.service('accounts').find({query: {email: 'confirm-test'}})
+    const testUser: any = await app.service('accounts').find({ query: { email: 'user@confirm-test.de' } })
     expect(testUser.data[0].emailVerified).toBeTruthy()
     expect(testUser.data[0].verificationToken).toBeNull()
   })
