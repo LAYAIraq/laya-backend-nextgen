@@ -14,7 +14,10 @@ export default function (app: Application): typeof Model {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
+      validate: {
+        isEmail: true
+      }
     },
     emailVerified: {
       type: DataTypes.BOOLEAN,
@@ -44,7 +47,7 @@ export default function (app: Application): typeof Model {
     },
     verificationToken: {
       type: DataTypes.UUID,
-      defaultValue: createVerificationToken(16)
+      defaultValue: () => createVerificationToken(16)
     }
   }, {
     hooks: {
@@ -56,10 +59,16 @@ export default function (app: Application): typeof Model {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (accounts as any).associate = function (models: any): void {
-    accounts.hasOne(models.author_applications)
+    // accounts.hasOne(models.author_applications)
     // accounts.hasOne(models.user_appearance_prefs)
     // accounts.hasOne(models.user_media_prefs)
     // accounts.hasMany(models.courses)
+    accounts.hasMany(models.flags, {
+      foreignKey: 'authorId'
+    })
+    accounts.hasMany(models.flag_answers, {
+      foreignKey: 'authorId'
+    })
   }
 
   return accounts

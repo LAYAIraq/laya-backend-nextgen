@@ -18,13 +18,15 @@ import { Application } from '../declarations'
  * @param res The response
  * @param next The next function to call if the user is authenticated and has the required role
  * @param requiredRole The required role, omit for no role check
+ * @param checkId if set, check if the user is authenticated as the user with the given id
  */
 export default (
   app: Application,
   req: Request,
   res: Response,
   next: () => void,
-  requiredRole?: string
+  requiredRole?: string,
+  checkId?: number
 ): void => {
   if (typeof (req.headers.authorization) !== 'undefined') {
     const token = req.headers.authorization.split(' ')[1]
@@ -34,10 +36,19 @@ export default (
         if (typeof (requiredRole) !== 'undefined') { // role check
           app.service('accounts').get(payload.sub)
             .then((user) => {
-              user.role === requiredRole
-                ? next()
-                : res.status(403)
+              if (user.role === requiredRole) {
+                if (checkId !== undefined) { // check if id matches when necessary
+                  console.log('id check', checkId)
+                  user.id === checkId
+                    ? next()
+                    : res.status(403).send(new Forbidden('You are not allowed to access this resource'))
+                } else { // no id check necessary
+                  next()
+                }
+              } else {
+                res.status(403)
                   .send(new Forbidden(`You are not an ${requiredRole}`))
+              }
             })
             .catch(() => {
               throw new NotAuthenticated('Invalid token')

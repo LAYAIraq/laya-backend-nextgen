@@ -1,18 +1,18 @@
-// import { HooksObject } from '@feathersjs/feathers'
-import * as authentication from '@feathersjs/authentication'
+import { historyBundle, historyCreate, historyPurge } from '../../../hooks'
+import { authenticate } from '@feathersjs/authentication'
 // Don't remove this comment. It's needed to format import lines nicely.
-
-const { authenticate } = authentication.hooks
 
 export default {
   before: {
-    all: [authenticate('jwt')],
+    all: [
+      authenticate('jwt')
+    ],
     find: [],
-    get: [],
+    get: [historyBundle('answerId', 'history')],
     create: [],
-    update: [],
-    patch: [],
-    remove: []
+    update: [historyCreate('answerId', 'text')],
+    patch: [historyCreate('answerId', 'text')],
+    remove: [historyPurge('answerId')]
   },
 
   after: {

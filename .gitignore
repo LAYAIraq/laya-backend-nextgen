@@ -112,3 +112,4 @@ lib/
 data/
 test/data/
 *.sqlite
+.env

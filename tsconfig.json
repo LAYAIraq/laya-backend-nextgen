@@ -9,10 +9,10 @@
     "skipLibCheck": true
   },
   "exclude": [
-    "test",
     "node_modules"
   ],
   "rules": {
-    "no-unused-vars": "off"
+    "no-unused-vars": "off",
+    "@typescript-eslint/prefer-ts-expect-error": "off"
   }
 }

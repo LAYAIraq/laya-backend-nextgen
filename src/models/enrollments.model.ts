@@ -31,14 +31,14 @@ export default function (app: Application): typeof Model {
   (enrollments as any).associate = function (models: any): void {
     enrollments.belongsTo(models.accounts, {
       foreignKey: {
-        name: 'studentId',
-        allowNull: false
+        name: 'studentId'
+        // allowNull: false
       }
     })
     enrollments.belongsTo(models.courses, {
       foreignKey: {
-        name: 'courseId',
-        allowNull: false
+        name: 'courseId'
+        // allowNull: false
       }
     })
     // See https://sequelize.org/master/manual/assocs.html

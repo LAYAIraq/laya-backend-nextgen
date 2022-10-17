@@ -10,3 +10,6 @@ export default {
   AUTHOR: 'author',
   STUDENT: 'student'
 }
+
+// shorthand for roles that are allowed to create courses (to be used in role-verify.ts)
+export const courseCreators = ['admin', 'editor', 'author']

@@ -21,6 +21,10 @@ export default function (app: Application): typeof Model {
     decidedOn: {
       type: DataTypes.DATE
     },
+    edited: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: null
+    },
     fullName: {
       type: DataTypes.STRING,
       allowNull: false
@@ -30,7 +34,8 @@ export default function (app: Application): typeof Model {
       allowNull: false
     },
     status: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      defaultValue: 'pending'
     }
 
   }, {
@@ -46,7 +51,8 @@ export default function (app: Application): typeof Model {
     authorApplications.belongsTo(models.accounts, {
       foreignKey: 'applicantId'
     })
-    authorApplications.hasMany(models.application_history)
+    // authorApplications.hasMany(models.application_history)
+    // authorApplications.hasMany(models.editor_votes)
   }
 
   return authorApplications

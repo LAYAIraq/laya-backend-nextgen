@@ -12,7 +12,7 @@ export default function (app: Application): typeof Model {
       allowNull: false
     },
     id: {
-      type: DataTypes.UUID,
+      type: DataTypes.UUIDV4,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true
     },
@@ -35,13 +35,10 @@ export default function (app: Application): typeof Model {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (courseContent as any).associate = function (models: any): void {
-    courseContent.belongsTo(models.courses, {
-      foreignKey: {
-        name: 'courseId',
-        allowNull: false
-      }
+    courseContent.hasOne(models.flags, {
+      foreignKey: 'referenceId',
+      onDelete: 'CASCADE'
     })
-    // courseContent.hasMany()
     // See https://sequelize.org/master/manual/assocs.html
   }
 

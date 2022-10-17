@@ -5,6 +5,4 @@ describe('\'userAppearancePrefs\' service', () => {
     const service = app.service('user-appearance-prefs')
     expect(service).toBeTruthy()
   })
-
-  it
 })

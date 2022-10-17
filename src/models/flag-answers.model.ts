@@ -7,6 +7,13 @@ import { HookReturn } from 'sequelize/types/hooks'
 export default function (app: Application): typeof Model {
   const sequelizeClient: Sequelize = app.get('sequelizeClient')
   const flagAnswers = sequelizeClient.define('flag_answers', {
+    edited: {
+      type: DataTypes.BOOLEAN
+    },
+    isQuestion: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
     text: {
       type: DataTypes.STRING,
       allowNull: false
@@ -22,19 +29,10 @@ export default function (app: Application): typeof Model {
     }
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (flagAnswers as any).associate = function (models: any): void {
-    flagAnswers.belongsTo(models.flags, {
-      foreignKey: {
-        name: 'flagId',
-        allowNull: false
-      }
-    })
-    flagAnswers.belongsTo(models.accounts, {
-      foreignKey: {
-        name: 'authorId',
-        allowNull: false
-      }
+    flagAnswers.hasMany(models.flag_answer_history, {
+      foreignKey: 'answerId',
+      onDelete: 'CASCADE'
     })
   }
 
