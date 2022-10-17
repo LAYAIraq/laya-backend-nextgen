@@ -67,7 +67,7 @@
     "@types/supertest": "^2.0.12",
     "@types/validator": "^10.11.3",
     "axios": "^0.27.2",
-    "feathers-swagger": "^1.2.2",
+    "feathers-swagger": "^2.0.0",
     "pre-commit": "^1.2.2",
     "shx": "^0.3.4",
     "supertest": "^6.2.4",
