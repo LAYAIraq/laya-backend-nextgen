@@ -1,7 +1,7 @@
 {
   "name": "laya-backend-nextgen",
   "description": "Laya Backend",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "homepage": "",
   "private": true,
   "main": "src",
@@ -23,19 +23,20 @@
     "node": "^16.0.0",
     "npm": ">= 3.0.0"
   },
+  "pre-commit": [
+    "lint"
+  ],
   "scripts": {
-    "test": "npm run lint && npm run compile && npm run jest",
-    "lint": "ts-standard ./src/**/*.ts --fix",
+    "test": "npm run lint && npm run compile && npm run jest ",
+    "lint": "ts-standard src/ --ext .ts",
+    "lint:fix": "ts-standard src/ --ext .ts --fix",
+    "lint-tests": "ts-standard test/ --ext .ts",
+    "lint-tests:fix": "ts-standard test/ --ext .ts --fix",
     "dev": "ts-node-dev --no-notify src/",
     "start": "npm run compile && node lib/",
     "jest": "jest --forceExit",
-    "compile": "shx rm -rf lib/ && tsc"
-  },
-  "standard": {
-    "env": [
-      "jest"
-    ],
-    "ignore": []
+    "compile": "shx rm -rf lib/ && tsc",
+    "clean": "shx rm -rf test/data/"
   },
   "types": "lib/",
   "dependencies": {
@@ -50,6 +51,7 @@
     "@feathersjs/transport-commons": "^4.5.15",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
+    "feathers-hooks-common": "^6.1.3",
     "feathers-sequelize": "^6.3.3",
     "helmet": "^4.6.0",
     "sequelize": "^6.19.2",
@@ -62,9 +64,13 @@
     "@types/cors": "^2.8.12",
     "@types/jest": "^27.5.1",
     "@types/jsonwebtoken": "^8.5.8",
+    "@types/supertest": "^2.0.12",
     "@types/validator": "^10.11.3",
     "axios": "^0.27.2",
+    "feathers-swagger": "^1.2.2",
+    "pre-commit": "^1.2.2",
     "shx": "^0.3.4",
+    "supertest": "^6.2.4",
     "ts-jest": "^28.0.2",
     "ts-node-dev": "^1.1.8",
     "ts-standard": "^11.0.0"
